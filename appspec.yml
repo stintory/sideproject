@@ -1,0 +1,35 @@
+version: 0.0
+os: linux
+files:
+  - source: ./dist
+    destination: /var/www/platform-api-nestjs
+  - source: ./package.json
+    destination: /var/www/platform-api-nestjs
+  - source: ./package-lock.json
+    destination: /var/www/platform-api-nestjs
+  - source: ./ecosystem.config.js
+    destination: /var/www/platform-api-nestjs
+file_exists_behavior: OVERWRITE
+permissions:
+  - object: /var/www/platform-api-nestjs
+    pattern: "**"
+    owner: "ubuntu"
+    group: "ubuntu"
+hooks:
+  BeforeInstall:
+    - location: scripts/check_prerequisites.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 180
+      runas: root
+  AfterInstall:
+    - location: scripts/env_aws_params.sh
+    - location: scripts/install_dependencies.sh
+      timeout: 600
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 180
+      runas: root
