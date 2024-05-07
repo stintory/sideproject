@@ -59,8 +59,8 @@ $ npm run test:cov
 ```
 
 ## View Schema Model
-Install Moon Modeler.
-open dddd.dmm in schemaModel folder
+- Install Moon Modeler.
+- open dddd.dmm in schemaModel folder
 ![view](https://github.com/stintory/boilerplate/assets/18318728/d2b608ab-fb09-4808-86ad-70b579d8ceb7)
 
 ## Support
