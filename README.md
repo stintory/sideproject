@@ -62,6 +62,11 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
+## View Schema Model
+- Install Moon Modeler.
+- open dddd.dmm in schemaModel folder
+![view](https://github.com/stintory/boilerplate/assets/18318728/d2b608ab-fb09-4808-86ad-70b579d8ceb7)
+
 ## Stay in touch
 
 - Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
