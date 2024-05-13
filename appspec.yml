@@ -2,16 +2,16 @@ version: 0.0
 os: linux
 files:
   - source: ./dist
-    destination: /var/www/platform-api-nestjs
+    destination: /var/www/boilerplate
   - source: ./package.json
-    destination: /var/www/platform-api-nestjs
+    destination: /var/www/boilerplate
   - source: ./package-lock.json
-    destination: /var/www/platform-api-nestjs
+    destination: /var/www/boilerplate
   - source: ./ecosystem.config.js
-    destination: /var/www/platform-api-nestjs
+    destination: /var/www/boilerplate
 file_exists_behavior: OVERWRITE
 permissions:
-  - object: /var/www/platform-api-nestjs
+  - object: /var/www/boilerplate
     pattern: "**"
     owner: "ubuntu"
     group: "ubuntu"
