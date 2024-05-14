@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaOptions, Types } from 'mongoose';
-import { IsObject } from 'class-validator';
+import { Document, SchemaOptions } from 'mongoose';
 
 const options: SchemaOptions = {
   versionKey: false,
@@ -33,9 +32,9 @@ export class Plan extends Document {
 
 const _PlanSchema = SchemaFactory.createForClass(Plan);
 _PlanSchema.methods.toWeb = function () {
-    const json = this.toJSON();
-    json.id = this._id;
-    return json;
-}
+  const json = this.toJSON();
+  json.id = this._id;
+  return json;
+};
 
 export const PlanSchema = _PlanSchema;

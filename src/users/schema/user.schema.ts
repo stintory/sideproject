@@ -108,10 +108,26 @@ export class User extends Document {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  readonly readonlyData: {
+    _id: string;
+    socialLogin: string;
+    nickname: string;
+    role: string;
+  };
 }
 
 const _UserSchema = SchemaFactory.createForClass(User);
-_UserSchema.set('toObject', {virtuals: true});
-_UserSchema.set('toJSON', {virtuals: true});
+_UserSchema.set('toObject', { virtuals: true });
+_UserSchema.set('toJSON', { virtuals: true });
+
+_UserSchema.virtual('readOnlyData').get(function (this: User) {
+  return {
+    _id: this._id,
+    socialLogin: this.socialLogin,
+    nickname: this.nickname,
+    role: this.role,
+  };
+});
 
 export const UserSChema = _UserSchema;
