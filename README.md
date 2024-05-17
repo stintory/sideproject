@@ -65,7 +65,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## View Schema Model
 - Install Moon Modeler.
 - open dddd.dmm in schemaModel folder
-![view](https://github.com/stintory/boilerplate/assets/18318728/d2b608ab-fb09-4808-86ad-70b579d8ceb7)
+![view](https://github.com/stintory/boilerplate/assets/18318728/679d544c-9619-40d5-b75c-1339fe5549b1)
 
 ## Stay in touch
 

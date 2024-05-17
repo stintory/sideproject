@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsEmail } from 'class-validator';
 
 export class UpdateUserDto {
+  [x: string]: any;
   @ApiProperty({
     example: 'male ? female',
     description: '성별',

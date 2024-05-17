@@ -13,7 +13,7 @@ export class UsersService {
 
   async updateUser(userId: string, updateUser: UpdateUserDto) {
     const update = await this.usersRepository.updateUser(userId, updateUser);
-    if (updateUser) {
+    if (update) {
       return {
         ...updateUser.readOnlyData,
         message: 'Updated successfully',

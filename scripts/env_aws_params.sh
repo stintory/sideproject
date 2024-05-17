@@ -16,7 +16,7 @@ ENVIRONMENT=$(aws ec2 describe-tags \
 # get all SSM parameter names under the given path
 SSM_PARAMETER_NAMES=$(aws ssm get-parameters-by-path \
   --region "$REGION" \
-  --path "/Letsee/Backend/$ENVIRONMENT" \
+  --path "/Backend/$ENVIRONMENT" \
   --recursive \
   --query 'Parameters[].Name' \
   --output text)

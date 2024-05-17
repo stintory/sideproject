@@ -18,7 +18,8 @@
 					"defaultvalue": "",
 					"data": "",
 					"after": "",
-					"options": ""
+					"options": "",
+					"fk": true
 				},
 				{
 					"id": "2c1c9cf6-0dae-419a-8a1d-f9f1d97e2d14",
@@ -43,20 +44,6 @@
 					"nn": false,
 					"list": false,
 					"comment": "petName + 초기 질문에서 관계에 아빠 엄마 인지. ",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "d41f26d3-4ba7-41f1-b33e-dadf9cdc748c",
-					"name": "sex",
-					"datatype": "String",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "애견의 성별",
 					"defaultvalue": "",
 					"data": "",
 					"after": "",
@@ -119,37 +106,9 @@
 					"options": ""
 				},
 				{
-					"id": "3f56af14-815c-42a2-8e77-2b62d75ed766",
-					"name": "name",
-					"datatype": "String",
-					"param": "optional",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "optional \nmypage -  profile Update",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
 					"id": "f5e9a266-342b-40a0-8631-cb57a4fe1187",
 					"name": "phone",
 					"datatype": "String",
-					"param": "optional",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "optional \nmypage -  profile Update",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "b3928b7f-dc94-4041-9c56-aac6b9285dab",
-					"name": "birth",
-					"datatype": "Date",
 					"param": "optional",
 					"pk": false,
 					"nn": false,
@@ -229,13 +188,29 @@
 					"data": "",
 					"after": "",
 					"options": ""
+				},
+				{
+					"id": "ac3aa489-9785-4cd5-b9af-77ecaef75f01",
+					"name": "userId",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": false,
+					"nn": true,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": "",
+					"fk": true
 				}
 			],
 			"relations": [
 				"640603c1-7524-4a62-a8cd-5546b574328e",
 				"60ffbcc8-5d59-4598-8497-5255b09b4c05",
 				"c4942ec8-1dbe-4a1a-b4a3-51514f7ba475",
-				"76fd8396-fd73-47fa-8fe3-7827eb172a5d"
+				"76fd8396-fd73-47fa-8fe3-7827eb172a5d",
+				"2a686002-4868-48cf-ba00-69e2e6e2014d"
 			],
 			"lines": [],
 			"keys": [
@@ -494,20 +469,6 @@
 					"fk": true
 				},
 				{
-					"id": "8cece387-dfdf-45a9-be01-4401b261879d",
-					"name": "title",
-					"datatype": "String",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
 					"id": "517117ee-6b7f-462f-9ecc-043523d9dafe",
 					"name": "content",
 					"datatype": "String",
@@ -654,20 +615,6 @@
 					"options": ""
 				},
 				{
-					"id": "2566ba76-6f72-4e44-8bd7-26e069828161",
-					"name": "postId",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": true,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
 					"id": "639fc97b-2fd6-45b5-b1df-a9009f1bc60d",
 					"name": "createdAt",
 					"datatype": "Date",
@@ -711,10 +658,6 @@
 						{
 							"id": "c0fd00ee-3069-4b6b-a1da-1b8c1b5e3e38",
 							"colid": "331f56ce-70aa-4647-8184-aeae4fe13413"
-						},
-						{
-							"id": "b0cfd545-e748-4f37-87b8-639f32fe548c",
-							"colid": "2566ba76-6f72-4e44-8bd7-26e069828161"
 						}
 					]
 				}
@@ -1631,20 +1574,6 @@
 					"data": "",
 					"after": "",
 					"options": ""
-				},
-				{
-					"id": "73a90235-d5e2-4128-bbb4-aeb02b205da3",
-					"name": "updatedAt",
-					"datatype": "Date",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
 				}
 			],
 			"relations": [
@@ -1783,6 +1712,155 @@
 						{
 							"id": "3e6cdd52-bd80-45ba-9f21-2081e2d5b6b4",
 							"colid": "76efd32e-2c33-4a7b-92d8-0d904392542a"
+						}
+					]
+				}
+			],
+			"indexes": [],
+			"embeddable": false,
+			"generate": true,
+			"generateCustomCode": true,
+			"customCode": "",
+			"beforeScript": "",
+			"afterScript": "",
+			"others": ""
+		},
+		"74b24bf7-8aee-4332-a36d-49c9c746de2f": {
+			"id": "74b24bf7-8aee-4332-a36d-49c9c746de2f",
+			"visible": true,
+			"name": "pets",
+			"desc": "",
+			"estimatedSize": "",
+			"cols": [
+				{
+					"id": "12734206-bd09-4a97-ba81-997466dd1e28",
+					"name": "_id",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "cca98060-f4f5-4cc2-8d1a-ee0f103c30a8",
+					"name": "userId",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "443e3a73-b18b-4a1f-bd3c-e64ab6db49e0",
+					"name": "sex",
+					"datatype": "String",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "eb6d51f4-f704-4dba-9e7a-d735d361010e",
+					"name": "birth",
+					"datatype": "String",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "49d0f2c3-d59d-4d75-b4ec-304fa5445d82",
+					"name": "name",
+					"datatype": "String",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "b3910eca-5cf8-4700-bd58-1993591da3b8",
+					"name": "age",
+					"datatype": "Number",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "1ffc1a74-7ba0-432c-bd55-3a1f57c7468c",
+					"name": "createdAt",
+					"datatype": "Date",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "2b1c63ea-b5fe-4225-b650-1d6a66cebeaf",
+					"name": "updatedAt",
+					"datatype": "Date",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				}
+			],
+			"relations": [
+				"2a686002-4868-48cf-ba00-69e2e6e2014d"
+			],
+			"lines": [],
+			"keys": [
+				{
+					"id": "d2a93e7d-96f8-46ef-a207-2d7788641798",
+					"name": "Primary",
+					"isPk": true,
+					"cols": [
+						{
+							"id": "512d5f1b-6485-4ce9-a763-8196b441be84",
+							"colid": "12734206-bd09-4a97-ba81-997466dd1e28"
+						},
+						{
+							"id": "baaf4c06-5f66-4e01-8e95-02b6acc5f285",
+							"colid": "cca98060-f4f5-4cc2-8d1a-ee0f103c30a8"
 						}
 					]
 				}
@@ -2040,6 +2118,38 @@
 			"generateCustomCode": true,
 			"customCode": "",
 			"relationColor": "transparent"
+		},
+		"2a686002-4868-48cf-ba00-69e2e6e2014d": {
+			"id": "2a686002-4868-48cf-ba00-69e2e6e2014d",
+			"visible": true,
+			"name": "userId__id",
+			"desc": "",
+			"type": "identifying",
+			"parent_key": "d2a93e7d-96f8-46ef-a207-2d7788641798",
+			"parent": "74b24bf7-8aee-4332-a36d-49c9c746de2f",
+			"child": "4b2b73c7-29e3-47dc-8b85-50e6b72fd1d5",
+			"c_mp": "true",
+			"c_mch": "true",
+			"c_p": "one",
+			"c_ch": "many",
+			"c_cp": "",
+			"c_cch": "",
+			"cols": [
+				{
+					"id": "842699f2-4e6a-4355-9738-98b2227ae727",
+					"parentcol": "12734206-bd09-4a97-ba81-997466dd1e28",
+					"childcol": "553930ca-a50f-4871-8f31-141bb2661528"
+				},
+				{
+					"id": "d390c682-9456-4cc0-b52e-9d1cfc9b0d26",
+					"parentcol": "cca98060-f4f5-4cc2-8d1a-ee0f103c30a8",
+					"childcol": "ac3aa489-9785-4cd5-b9af-77ecaef75f01"
+				}
+			],
+			"generate": true,
+			"generateCustomCode": true,
+			"customCode": "",
+			"relationColor": "transparent"
 		}
 	},
 	"notes": {},
@@ -2074,7 +2184,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1714103778835
+		"lastSaved": 1715580394210
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -2094,7 +2204,7 @@
 					"referencedItemId": "4b2b73c7-29e3-47dc-8b85-50e6b72fd1d5",
 					"x": 49,
 					"y": 299,
-					"gHeight": 495,
+					"gHeight": 459,
 					"gWidth": 232,
 					"color": "#ffffff",
 					"background": "#03a9f4",
@@ -2120,7 +2230,7 @@
 					"referencedItemId": "f8cf2ece-6b57-46e2-8d33-81552f0e9afe",
 					"x": 1167,
 					"y": 274,
-					"gHeight": 135,
+					"gHeight": 117,
 					"gWidth": 201,
 					"color": "#ffffff",
 					"background": "#03a9f4",
@@ -2133,7 +2243,7 @@
 					"referencedItemId": "084e48e5-e503-4f89-823b-e8df379f043b",
 					"x": 1719,
 					"y": 77,
-					"gHeight": 153,
+					"gHeight": 135,
 					"gWidth": 201,
 					"color": "#ffffff",
 					"background": "#03a9f4",
@@ -2248,8 +2358,8 @@
 				},
 				"6f1a9903-558e-4d03-8f81-e899733898c5": {
 					"referencedItemId": "6f1a9903-558e-4d03-8f81-e899733898c5",
-					"x": 532,
-					"y": 526,
+					"x": 319,
+					"y": 913,
 					"gHeight": 81,
 					"gWidth": 177,
 					"color": "#ffffff",
@@ -2261,9 +2371,9 @@
 				},
 				"c9117b7a-3128-4859-b7f2-2d88fdf6293c": {
 					"referencedItemId": "c9117b7a-3128-4859-b7f2-2d88fdf6293c",
-					"x": 869,
-					"y": 811,
-					"gHeight": 261,
+					"x": 1338,
+					"y": 837,
+					"gHeight": 243,
 					"gWidth": 213,
 					"color": "#ffffff",
 					"background": "#03a9f4",
@@ -2274,9 +2384,22 @@
 				},
 				"58adb5b9-9cd4-4b8f-8dc7-c15efe0419b8": {
 					"referencedItemId": "58adb5b9-9cd4-4b8f-8dc7-c15efe0419b8",
-					"x": 420,
-					"y": 803,
+					"x": 936,
+					"y": 838,
 					"gHeight": 135,
+					"gWidth": 201,
+					"color": "#ffffff",
+					"background": "#03a9f4",
+					"resized": false,
+					"autoExpand": true,
+					"backgroundOpacity": "10",
+					"collapsed": false
+				},
+				"74b24bf7-8aee-4332-a36d-49c9c746de2f": {
+					"referencedItemId": "74b24bf7-8aee-4332-a36d-49c9c746de2f",
+					"x": 60,
+					"y": 57,
+					"gHeight": 171,
 					"gWidth": 201,
 					"color": "#ffffff",
 					"background": "#03a9f4",

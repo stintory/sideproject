@@ -2,7 +2,7 @@
 set -xe
 
 # Check if the deployment directory does not exist
-proj_dir="/var/www/platform-api-nestjs"
+proj_dir="/var/www/boilerplate"
 if [ ! -d "$proj_dir" ]; then
   mkdir -p "$proj_dir"
   chown ubuntu:ubuntu "$proj_dir"

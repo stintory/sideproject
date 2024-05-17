@@ -1,4 +1,4 @@
 #!/bin/bash
 set -x
 
-su - ubuntu -c 'npm install --prefix /var/www/platform-api-nestjs'
+su - ubuntu -c 'npm install --prefix /var/www/boilerplate'

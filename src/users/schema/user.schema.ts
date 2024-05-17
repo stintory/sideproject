@@ -42,7 +42,7 @@ export class User extends Document {
     index: true,
     unique: true,
   })
-  socialLogin: string;
+  provider: string;
 
   @Prop({
     required: true,
@@ -52,9 +52,11 @@ export class User extends Document {
   nickname: string;
 
   @Prop({
-    default: null,
+    required: true,
+    index: true,
+    unique: true,
   })
-  sex: string;
+  snsId: number;
 
   @Prop({
     required: true,
@@ -63,8 +65,8 @@ export class User extends Document {
   })
   role: Role;
 
-  @Prop({ default: [] })
-  members: MembersType;
+  @Prop({ default: null })
+  members: MembersType[];
 
   @Prop({
     default: null,
@@ -74,17 +76,7 @@ export class User extends Document {
   @Prop({
     default: null,
   })
-  name: string;
-
-  @Prop({
-    default: null,
-  })
   phone: string;
-
-  @Prop({
-    default: null,
-  })
-  birth: string;
 
   @Prop({
     default: false,
@@ -92,16 +84,22 @@ export class User extends Document {
   phoneVerified: boolean;
 
   @Prop({
-    defualt: [],
+    default: null,
   })
-  authority: AuthorityType;
+  authority: AuthorityType[];
 
   @Prop({
     type: Types.ObjectId,
-    required: true,
+    required: false,
     ref: 'plans',
   })
   planId: Types.ObjectId;
+
+  @Prop()
+  refreshToken: string[];
+
+  @Prop()
+  refreshTokenExpires: Date;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -109,9 +107,9 @@ export class User extends Document {
   @Prop({ default: Date.now })
   updatedAt: Date;
 
-  readonly readonlyData: {
+  readonly readOnlyData: {
     _id: string;
-    socialLogin: string;
+    provider: string;
     nickname: string;
     role: string;
   };
@@ -124,10 +122,10 @@ _UserSchema.set('toJSON', { virtuals: true });
 _UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     _id: this._id,
-    socialLogin: this.socialLogin,
+    provider: this.provider,
     nickname: this.nickname,
     role: this.role,
   };
 });
 
-export const UserSChema = _UserSchema;
+export const UserSchema = _UserSchema;

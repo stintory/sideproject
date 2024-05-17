@@ -16,6 +16,7 @@ async function bootstrap() {
     bufferLogs: true,
     logger: winstonLogger,
   });
+  app.setGlobalPrefix('v1');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -46,8 +47,8 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   const config = new DocumentBuilder()
-    .setTitle('Letsee Developer API')
-    .setDescription('Letsee Developer 개발을 위한 API 문서입니다.')
+    .setTitle('Developer API')
+    .setDescription('Developer 개발을 위한 API 문서입니다.')
     .addBearerAuth(
       {
         type: 'http',
@@ -59,7 +60,7 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
-    .addServer('http://localhost:3001');
+    .addServer('http://localhost:3005');
   const configV1 = config.setVersion('1.0').build();
 
   const document = SwaggerModule.createDocument(app, configV1, {
