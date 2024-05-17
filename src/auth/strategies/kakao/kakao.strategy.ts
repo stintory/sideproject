@@ -33,7 +33,6 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
           nickname: profile._json.properties.nickname,
           provider: 'kakao',
           snsId: profile.id,
-          refreshToken: [refreshToken],
         });
         return done(null, newUser);
       }

@@ -1,12 +1,14 @@
-import { Controller, HttpCode, Get, Patch, Param, Body } from '@nestjs/common';
+import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from 'src/@decorator/user.decorator';
 import { User } from '../schema/user.schema';
 import { ValidateMongoIdPipe } from 'src/@common/pipes/ValidateMongoIdPipe';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -28,10 +30,7 @@ export class UsersController {
     summary: '사용자 정보 수정',
     description: '사용자 정보를 수정합니다.',
   })
-  async updateUser(
-    @Param('id', ValidateMongoIdPipe) userId: string,
-    @Body() body?: UpdateUserDto,
-  ) {
+  async updateUser(@Param('id', ValidateMongoIdPipe) userId: string, @Body() body?: UpdateUserDto) {
     return await this.usersService.updateUser(userId, body);
   }
 }

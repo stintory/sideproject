@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from '../../users/repository/users.repository';
 import { AuthRepository } from '../repository/auth.repository';
 import { User } from '../../users/schema/user.schema';
+import * as jwt from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -18,69 +20,83 @@ export class AuthService {
     return user;
   }
 
-  async login(userData: User) {
-    const { provider, snsId, email } = userData;
+  async login(id: number, email: string): Promise<any> {
+    const user = await this.usersRepository.findOne({ snsId: id, email });
+    if (!user) {
+      throw new BadRequestException('user not found');
+    }
 
-    return userData;
+    const token = await this.generateToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
+    const expires_in = await this.getExpToken(token);
+
+    return {
+      id: user.id,
+      nickname: user.nickname,
+      email: user.email,
+      phone: user.phone,
+      phoneVerified: user.phoneVerified,
+      role: user.role,
+      authority: user.authority,
+      access_token: token,
+      refresh_token: refreshToken,
+      expires_in: expires_in,
+    };
+  }
+
+  async generateToken(user: User): Promise<string> {
+    const { JWT_ACCESS_TOKEN_EXP, JWT_ACCESS_TOKEN_SECRET } = process.env;
+
+    const payload = {
+      sub: user._id,
+      role: user.role,
+    };
+
+    return jwt.sign(payload, JWT_ACCESS_TOKEN_SECRET, {
+      expiresIn: JWT_ACCESS_TOKEN_EXP,
+    });
+  }
+
+  async generateRefreshToken(user: User): Promise<string> {
+    const { JWT_REFRESH_TOKEN_SECRET, JWT_REFRESH_TOKEN_EXP } = process.env;
+    const payload = {
+      sub: user._id,
+    };
+
+    const refreshToken = jwt.sign(payload, JWT_REFRESH_TOKEN_SECRET, {
+      expiresIn: JWT_REFRESH_TOKEN_EXP,
+    });
+
+    // refresh token 만료시간
+    const refreshTokenExpires = await this.getExpRefreshToken(refreshToken);
+    await this.usersRepository.update(user._id, { refreshToken, refreshTokenExpires });
+
+    return refreshToken;
+  }
+
+  private async getExpRefreshToken(token: string) {
+    try {
+      const decodedToken = jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET) as JwtPayload;
+      const expirationTime = decodedToken.exp;
+      const expiresTime = new Date(expirationTime * 1000);
+      return expiresTime;
+    } catch (error) {
+      console.error('Token verification failed:', error.message);
+    }
+  }
+  private async getExpToken(token: string) {
+    try {
+      const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET) as JwtPayload;
+      const expirationTime = decodedToken.exp;
+      const iatTime = decodedToken.iat;
+
+      const expiresTime = expirationTime - iatTime;
+      const currentDate = new Date();
+      const milliSecond = expiresTime * 1000;
+      console.log('Expiration Time:', new Date(currentDate.getTime() + milliSecond)); // UNIX 타임스탬프를 일반 날짜로 변환
+      return expiresTime;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
-
-//
-// async kakaoLogin(code: string) {
-//   try {
-//     // 카카오로부터 받은 인가 코드를 사용하여 인증 토큰을 요청
-//     const tokenResponse = await this.requestKakaoAccessToken(code);
-//
-//     // 받은 토큰을 이용하여 사용자 정보를 가져오기
-//     const userInfoResponse = await this.requestKakaoUserInfo(tokenResponse.access_token);
-//
-//     // 필요한 사용자 정보를 추출하여 JSON 형식으로 반환
-//     const userInfo = this.extractUserInfo(userInfoResponse);
-//
-//     return userInfo;
-//   } catch (error) {
-//     console.error('카카오 로그인 요청에 실패했습니다:', error.response.data);
-//     throw new InternalServerErrorException('카카오 로그인 요청에 실패했습니다');
-//   }
-// }
-//
-// // 카카오로부터 인가 코드를 이용하여 인증 토큰을 요청하는 메서드
-// private async requestKakaoAccessToken(code: string) {
-//   const data = {
-//     grant_type: 'authorization_code',
-//     client_id: process.env.KAKAO_CLIENT_ID,
-//     redirect_uri: process.env.REDIRECT_URL,
-//     code,
-//   };
-//
-//   const params = new URLSearchParams(data).toString();
-//   const config = {
-//     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-//   };
-//
-//   const tokenUrl = `https://kauth.kakao.com/oauth/token`;
-//   const response = await this.httpService.axiosRef.post(tokenUrl, params, config);
-//   return response.data;
-// }
-//
-// // 토큰을 이용하여 사용자 정보를 가져오는 메서드
-// private async requestKakaoUserInfo(accessToken: string) {
-//   const userInfoUrl = `https://kapi.kakao.com/v2/user/me`;
-//   const config = {
-//     headers: { Authorization: `Bearer ${accessToken}` },
-//   };
-//   const response = await this.httpService.axiosRef.get(userInfoUrl, config);
-//   return response.data;
-// }
-//
-// // 사용자 정보에서 필요한 부분만 추출하여 반환하는 메서드
-// private extractUserInfo(userInfo: any) {
-//   const { id, kakao_account } = userInfo;
-//   return {
-//     id,
-//     email: kakao_account.email,
-//     nickname: kakao_account.profile.nickname,
-//     photo: kakao_account.profile.image_url,
-//   };
-// }
-// }

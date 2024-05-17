@@ -96,7 +96,7 @@ export class User extends Document {
   planId: Types.ObjectId;
 
   @Prop()
-  refreshToken: string[];
+  refreshToken: string;
 
   @Prop()
   refreshTokenExpires: Date;

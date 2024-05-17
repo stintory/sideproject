@@ -17,7 +17,10 @@ export class AuthController {
   @Get('kakao/callback')
   @UseGuards(KakaoAuthGuard)
   async KakaoCallback(@CurrentUser() userData: User, @Res() res: Response) {
-    await this.authService.login(userData);
+    console.log('==================');
+    console.log(userData);
+    const { snsId, email } = userData;
+    const result = await this.authService.login(snsId, email);
     return res.redirect('/v1');
   }
 }
