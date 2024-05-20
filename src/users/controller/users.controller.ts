@@ -1,4 +1,4 @@
-import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards, Delete } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from 'src/@decorator/user.decorator';
@@ -32,5 +32,14 @@ export class UsersController {
   })
   async updateUser(@Param('id', ValidateMongoIdPipe) userId: string, @Body() body?: UpdateUserDto) {
     return await this.usersService.updateUser(userId, body);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: '사용자 정보 삭제',
+    description: '사용자 정보를 삭제합니다.',
+  })
+  async deleteUser(@Param('id', ValidateMongoIdPipe) userId: string) {
+    return await this.usersService.deleteUser(userId);
   }
 }

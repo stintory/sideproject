@@ -22,4 +22,15 @@ export class UsersService {
       throw new BadRequestException('Update user failed');
     }
   }
+
+  async deleteUser(userId: string) {
+    const deleteUser = await this.usersRepository.deleteUser(userId);
+    if (deleteUser) {
+      return {
+        message: 'Deleted successfully',
+      };
+    } else {
+      throw new BadRequestException('Delete user failed');
+    }
+  }
 }

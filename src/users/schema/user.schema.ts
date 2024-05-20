@@ -56,7 +56,7 @@ export class User extends Document {
     index: true,
     unique: true,
   })
-  snsId: number;
+  snsId: string;
 
   @Prop({
     required: true,

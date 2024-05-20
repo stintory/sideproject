@@ -6,7 +6,7 @@ import { UsersRepository } from '../../../users/repository/users.repository';
 
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
-  constructor(private readonly authService: AuthService, private readonly usersRepository: UsersRepository) {
+  constructor(private readonly authService: AuthService) {
     // authService 주입
     super({
       clientID: process.env.KAKAO_CLIENT_ID,
@@ -23,17 +23,18 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     try {
       const provider = profile.provider;
       const snsId = profile.id;
-      const exUser = await this.authService.validateKakaoUser(provider, snsId);
+      // 1. provider && snsId
+      const exUser = await this.authService.validateSnsUser(provider, snsId);
+      const id = profile.id;
       if (exUser) {
         console.log('already exists');
         return done(null, exUser);
       } else {
-        const newUser = await this.usersRepository.create({
-          email: profile._json.kakao_account.email,
-          nickname: profile._json.properties.nickname,
-          provider: 'kakao',
-          snsId: profile.id,
-        });
+        const email = profile._json.kakao_account.email;
+        const nickname = profile._json.properties.nickname;
+        const provider = 'kakao';
+        const snsId = id.toString();
+        const newUser = await this.authService.register({ email, nickname, provider, snsId });
         return done(null, newUser);
       }
     } catch (error) {

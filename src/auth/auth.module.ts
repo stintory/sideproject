@@ -10,6 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import { HttpModule } from '@nestjs/axios';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+import { GoogleStrategy } from './strategies/google/google.strategy';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { JwtStrategy } from './strategies/jwt/jwt.strategy';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, KakaoStrategy, UsersRepository, JwtStrategy],
-  exports: [AuthRepository, AuthService, KakaoStrategy],
+  providers: [AuthService, AuthRepository, KakaoStrategy, GoogleStrategy, UsersRepository, JwtStrategy],
+  exports: [AuthRepository, AuthService, KakaoStrategy, GoogleStrategy],
 })
 export class AuthModule {}

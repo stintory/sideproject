@@ -4,10 +4,33 @@ import { AuthRepository } from '../repository/auth.repository';
 import { User } from '../../users/schema/user.schema';
 import * as jwt from 'jsonwebtoken';
 import { JwtPayload } from 'jsonwebtoken';
+import { RegisterDto } from '../dto/register.user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersRepository: UsersRepository, private readonly authRepository: AuthRepository) {}
+
+  async register(body: RegisterDto) {
+    const { email, nickname, provider, snsId } = body;
+    const findUser = await this.usersRepository.findOne({ email });
+    if (!findUser) {
+      const newUser = await this.usersRepository.create({
+        email,
+        nickname,
+        provider,
+        snsId,
+      });
+      return newUser;
+    }
+    if (findUser.snsId !== snsId) {
+      const updateUser = await this.usersRepository.update(email, { snsId });
+      if (updateUser) {
+        return updateUser;
+      } else {
+        throw new BadRequestException('Update user failed');
+      }
+    }
+  }
 
   async validateUser(payload: any): Promise<User | null> {
     const { sub } = payload;
@@ -15,12 +38,12 @@ export class AuthService {
     return user;
   }
 
-  async validateKakaoUser(provider: string, snsId: string): Promise<User | null> {
+  async validateSnsUser(provider: string, snsId: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({ provider, snsId });
     return user;
   }
 
-  async login(id: number, email: string): Promise<any> {
+  async login(id: string, email: string): Promise<any> {
     const user = await this.usersRepository.findOne({ snsId: id, email });
     if (!user) {
       throw new BadRequestException('user not found');
