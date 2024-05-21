@@ -12,7 +12,7 @@ export class UsersService {
   }
 
   async updateUser(userId: string, updateUser: UpdateUserDto) {
-    const update = await this.usersRepository.updateUser(userId, updateUser);
+    const update = await this.usersRepository.update(userId, updateUser);
     if (update) {
       return {
         ...updateUser.readOnlyData,
@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   async deleteUser(userId: string) {
-    const deleteUser = await this.usersRepository.deleteUser(userId);
+    const deleteUser = await this.usersRepository.delete(userId);
     if (deleteUser) {
       return {
         message: 'Deleted successfully',

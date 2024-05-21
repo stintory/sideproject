@@ -5,17 +5,20 @@ import { User } from '../../users/schema/user.schema';
 import { CurrentUser } from '../../@decorator/user.decorator';
 import { Response } from 'express';
 import { GoogleAuthGuard } from '../strategies/google/google.guard';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('kakao')
+  @ApiExcludeEndpoint()
   @UseGuards(KakaoAuthGuard)
   async KakaoLogin() {
     return;
   }
   @Get('kakao/callback')
+  @ApiExcludeEndpoint()
   @UseGuards(KakaoAuthGuard)
   async KakaoCallback(@CurrentUser() userData: User, @Res() res: Response) {
     console.log('==================');
@@ -26,12 +29,14 @@ export class AuthController {
   }
 
   @Get('google')
+  @ApiExcludeEndpoint()
   @UseGuards(GoogleAuthGuard)
   async GoogleLogin() {
     return;
   }
 
   @Get('google/callback')
+  @ApiExcludeEndpoint()
   @UseGuards(GoogleAuthGuard)
   async GoogleCallback(@CurrentUser() userData: User, @Req() req, @Res() res: Response) {
     const { snsId, email } = userData;

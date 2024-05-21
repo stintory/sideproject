@@ -21,8 +21,8 @@ const diskStorage: multer.StorageEngine = multer.diskStorage({
 //
 const storage = multer.memoryStorage();
 
-export const targetMulterOptions: MulterOptions = {
-  storage: diskStorage,
+export const postMulterOptions: MulterOptions = {
+  storage: storage,
   limits: { fileSize: 1024 * 1024 * 1000 },
 };
 

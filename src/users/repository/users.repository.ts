@@ -5,7 +5,6 @@ import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
 export class UsersRepository {
-  [x: string]: any;
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findById(id: string): Promise<User> {
@@ -31,5 +30,9 @@ export class UsersRepository {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async delete(id: string): Promise<User | null> {
+    return this.userModel.findByIdAndDelete(id).exec();
   }
 }

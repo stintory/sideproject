@@ -6,19 +6,26 @@ const options: SchemaOptions = {
   collection: 'posts',
 };
 
-type friendType = {
-  read: boolean;
-  download: boolean;
-};
-
-type familyType = {
-  read: boolean;
-  download: boolean;
-};
-
 type AuthorityType = {
-  friend: friendType;
-  family: familyType;
+  friends: {
+    read: boolean;
+    download: boolean;
+  };
+  family: {
+    read: boolean;
+    download: boolean;
+  };
+};
+
+const defaultAuthority: AuthorityType = {
+  friends: {
+    read: false,
+    download: false,
+  },
+  family: {
+    read: false,
+    download: false,
+  },
 };
 
 // userId, title, images[], likes, comments, createdAtm updatedAt, authority.
@@ -38,26 +45,30 @@ export class Post extends Document {
   title: string;
 
   @Prop({
+    required: true,
+  })
+  content: string;
+
+  @Prop({
     type: [Types.ObjectId],
-    required: false,
+    dafault: null,
     ref: 'images',
   })
   images: Types.ObjectId[];
 
-  @Prop({
-    defualt: 0,
-  })
+  @Prop()
   likes: number;
 
   @Prop({
-    types: Object,
-    required: false,
+    types: [Types.ObjectId],
+    default: null,
     ref: 'comments',
   })
-  comments: Types.ObjectId;
+  comments: Types.ObjectId[];
 
   @Prop({
-    required: false,
+    type: Object,
+    default: defaultAuthority,
   })
   authority: AuthorityType;
 
@@ -66,10 +77,33 @@ export class Post extends Document {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  readonly getInfo: {
+    id: string;
+    title: string;
+    content: string;
+    likes: number;
+    images: Types.ObjectId[];
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
-const _PostsSchema = SchemaFactory.createForClass(Post);
-_PostsSchema.set('toObject', { virtuals: true });
-_PostsSchema.set('toJSON', { virtuals: true });
+const _PostSchema = SchemaFactory.createForClass(Post);
 
-export const PostsSchema = _PostsSchema;
+_PostSchema.virtual('getInfo').get(function (this: Post) {
+  return {
+    id: this._id,
+    title: this.title,
+    content: this.content,
+    likes: this.likes,
+    images: this.images,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+});
+
+_PostSchema.set('toObject', { virtuals: true });
+_PostSchema.set('toJSON', { virtuals: true });
+
+export const PostSchema = _PostSchema;
