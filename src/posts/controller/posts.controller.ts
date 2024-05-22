@@ -23,6 +23,8 @@ import { PaginationOptions } from '../../@interface/pagination.interface';
 import { ValidateMongoIdPipe } from '../../@common/pipes/ValidateMongoIdPipe';
 import * as Path from 'path';
 import { UpdatePostsDto } from '../dto/update.posts.dto';
+import { CommentsService } from '../../comments/service/comments.service';
+import { CreateCommentDto } from '../../comments/dto/create.comment.dto';
 
 @Controller('posts')
 @UseGuards(JwtAuthGuard)
@@ -65,5 +67,17 @@ export class PostsController {
   @ApiOperation({ summary: '게시글 삭제' })
   async deletePost(@Param('id', ValidateMongoIdPipe) postId: string) {
     return this.postsService.deletePost(postId);
+  }
+
+  // ===================================================
+  // 댓글 생성
+  @Post(':id/comment')
+  @ApiOperation({ summary: '댓글 생성' })
+  async createComment(
+    @Param('id', ValidateMongoIdPipe) postId: string,
+    @CurrentUser() user: User,
+    @Body() body: CreateCommentDto,
+  ) {
+    return this.postsService.createComment(postId, user, body);
   }
 }

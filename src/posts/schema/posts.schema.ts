@@ -33,9 +33,8 @@ const defaultAuthority: AuthorityType = {
 @Schema(options)
 export class Post extends Document {
   @Prop({
-    type: Types.ObjectId,
-    required: true,
-    ref: 'users',
+    type: [{ type: Types.ObjectId, ref: 'Users' }],
+    default: null,
   })
   userId: Types.ObjectId;
 
@@ -49,22 +48,17 @@ export class Post extends Document {
   })
   content: string;
 
-  @Prop({
-    type: [Types.ObjectId],
-    dafault: null,
-    ref: 'images',
-  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Image' }], default: null })
   images: Types.ObjectId[];
 
   @Prop()
   likes: number;
 
-  @Prop({
-    types: [Types.ObjectId],
-    default: null,
-    ref: 'comments',
-  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }], default: null })
   comments: Types.ObjectId[];
+
+  // @Prop({ type: [Types.ObjectId], ref: 'Comment', default: null })
+  // comments: Types.ObjectId[];
 
   @Prop({
     type: Object,
@@ -82,6 +76,7 @@ export class Post extends Document {
     id: string;
     title: string;
     content: string;
+    comments: Types.ObjectId[];
     likes: number;
     images: Types.ObjectId[];
     createdAt: string;
@@ -96,6 +91,7 @@ _PostSchema.virtual('getInfo').get(function (this: Post) {
     id: this._id,
     title: this.title,
     content: this.content,
+    comments: this.comments,
     likes: this.likes,
     images: this.images,
     createdAt: this.createdAt,
@@ -103,7 +99,7 @@ _PostSchema.virtual('getInfo').get(function (this: Post) {
   };
 });
 
-_PostSchema.set('toObject', { virtuals: true });
-_PostSchema.set('toJSON', { virtuals: true });
+_PostSchema.set('toObject', { virtuals: false });
+_PostSchema.set('toJSON', { virtuals: false });
 
 export const PostSchema = _PostSchema;

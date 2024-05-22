@@ -9,11 +9,13 @@ import { Post } from '../schema/posts.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { getPaginate } from '../../@utils/pagination.utils';
+import { CommentsRepository } from '../../comments/repository/comments.repository';
 @Injectable()
 export class PostsService {
   constructor(
     private readonly postsRepository: PostsRepository,
     private readonly imagesRepository: ImagesRepository,
+    private readonly commentsRepository: CommentsRepository,
     @InjectModel(Post.name) private readonly postModel: Model<Post>,
   ) {}
 
@@ -110,11 +112,11 @@ export class PostsService {
       const { title, content } = body;
       const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
-        throw new BadRequestException('존재하지 않는 게시글입니다.');
+        throw new BadRequestException('Not exist Post');
       }
       const updatedAt = new Date(Date.now());
 
-      const updatePost = await this.postsRepository.updateById(postId, { title, content, updatedAt });
+      const updatePost = await this.postsRepository.findByIdAndUpdate(postId, { title, content, updatedAt });
 
       return {
         result: {
@@ -131,6 +133,41 @@ export class PostsService {
     try {
       await this.postsRepository.deleteById(postId);
       return { message: 'Post deleted' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async createComment(id, user, body) {
+    try {
+      const userId = user._id;
+      const { comment } = body;
+      const postId = new Types.ObjectId(id);
+      const findPost = await this.postsRepository.findById(postId);
+      if (!findPost) {
+        throw new BadRequestException('Not exist Post');
+      }
+
+      const createdComment = await this.commentsRepository.create({ comment, userId, postId });
+      if (!createdComment) {
+        throw new BadRequestException('Create comment failed');
+      }
+
+      const updatedPost = await this.postsRepository.findByIdAndCommentUpdate(postId, {
+        comments: createdComment.id,
+      });
+
+      if (!updatedPost) {
+        throw new BadRequestException('Update post with comment failed');
+      }
+
+      const result = {
+        comment: updatedPost.comments,
+      };
+
+      return {
+        result,
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

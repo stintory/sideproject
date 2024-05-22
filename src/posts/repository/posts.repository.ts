@@ -16,11 +16,24 @@ export class PostsRepository {
     return this.postModel.findById(id).exec();
   }
 
-  async updateById(id: string | Types.ObjectId, updateObject: UpdateQuery<Post>): Promise<Post | null> {
+  async find(id: string): Promise<Post> {
+    return this.postModel.findById(id).populate('comments').populate('images').exec();
+  }
+
+  async findByIdAndUpdate(id: string | Types.ObjectId, updateObject: UpdateQuery<Post>): Promise<Post | null> {
     return await this.postModel.findByIdAndUpdate(id, updateObject, { new: true }).exec();
   }
 
   async deleteById(id: string | Types.ObjectId): Promise<Post> {
     return await this.postModel.findByIdAndDelete(id).exec();
+  }
+
+  async findByIdAndCommentUpdate(id: string | Types.ObjectId, updateData: any): Promise<Post> {
+    return (
+      this.postModel
+        .findByIdAndUpdate(id, { $push: updateData }, { new: true })
+        // .populate('comments')
+        .exec()
+    );
   }
 }

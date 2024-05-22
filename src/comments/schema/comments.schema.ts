@@ -11,12 +11,19 @@ export class Comment extends Document {
   @Prop({
     required: true,
   })
-  content: string;
+  comment: string;
 
   @Prop({
     type: Types.ObjectId,
+    ref: 'users',
     required: true,
+  })
+  userId: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
     ref: 'posts',
+    required: true,
   })
   postId: Types.ObjectId;
 
