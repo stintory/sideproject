@@ -21,14 +21,6 @@ export class Pet extends Document {
   userId: Types.ObjectId;
 
   @Prop({
-    enum: [Sex.male, Sex.female],
-  })
-  sex: Sex;
-
-  @Prop()
-  birth: string;
-
-  @Prop({
     required: true,
   })
   name: string;
@@ -36,11 +28,19 @@ export class Pet extends Document {
   @Prop()
   age: number;
 
+  @Prop({
+    enum: [Sex.male, Sex.female],
+  })
+  sex: Sex;
+
+  @Prop()
+  birth: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
-  @Prop({ default: Date.now })
-  UpdatedAt: Date;
+  @Prop({ default: null })
+  updatedAt: Date;
 }
 
 const _PetSchema = SchemaFactory.createForClass(Pet);

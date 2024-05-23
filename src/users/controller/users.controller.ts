@@ -1,6 +1,6 @@
 import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards, Delete } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/@decorator/user.decorator';
 import { User } from '../schema/user.schema';
 import { ValidateMongoIdPipe } from 'src/@common/pipes/ValidateMongoIdPipe';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
+@ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -17,7 +18,6 @@ export class UsersController {
   @ApiOperation({
     summary: '사용자 정보 조회',
     description: '사용자 정보를 조회합니다.',
-    tags: ['Working'],
   })
   async getUser(@CurrentUser() user: User) {
     return {

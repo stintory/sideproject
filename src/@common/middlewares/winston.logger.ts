@@ -34,7 +34,7 @@ export const winstonLogger = WinstonModule.createLogger({
                   debug: 'blue',
                 },
               }),
-              utilities.format.nestLike('platform-api-nestjs', {
+              utilities.format.nestLike('boilerplate', {
                 colors: true,
                 prettyPrint: true, // nest에서 제공하는 옵션. 로그 가독성을 높여줌
               }),
