@@ -26,6 +26,11 @@ export const postMulterOptions: MulterOptions = {
   limits: { fileSize: 1024 * 1024 * 1000 },
 };
 
+export const diaryMulterOptions: MulterOptions = {
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 1000 },
+};
+
 export const glbMulterOptions: MulterOptions = {
   storage: diskStorage,
 };

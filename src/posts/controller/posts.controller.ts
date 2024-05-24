@@ -80,4 +80,8 @@ export class PostsController {
   ) {
     return this.postsService.createComment(postId, user, body);
   }
+
+  //TODO: 게시글 좋아요 및 좋아요
+
+  //TODO: 게시글 좋아요 취소.
 }

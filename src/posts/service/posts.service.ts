@@ -3,7 +3,6 @@ import { PostsRepository } from '../repository/posts.repository';
 import { CreatePostsDto } from '../dto/create.posts.dto';
 import { ImagesRepository } from '../../images/repository/images.repository';
 import { v4 } from 'uuid';
-import * as fs from 'fs';
 import { PaginationOptions, PaginationResult } from '../../@interface/pagination.interface';
 import { Post } from '../schema/posts.schema';
 import { Model, Types } from 'mongoose';

@@ -8,8 +8,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { ImagesModule } from './images/images.module';
-import { GrowthRepotsModule } from './growth-repots/growth-repots.module';
-import { LifeModule } from './life/life.module';
+import { DiaryModule } from './diary/diary.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SuccessInterceptor } from './@common/interceptors/success.interceptor';
@@ -30,8 +29,7 @@ import { PetsModule } from './pets/pets.module';
     PostsModule,
     CommentsModule,
     ImagesModule,
-    GrowthRepotsModule,
-    LifeModule,
+    DiaryModule,
     PetsModule,
   ],
   controllers: [AppController],

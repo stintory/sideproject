@@ -3,11 +3,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 const options: SchemaOptions = {
   versionKey: false,
-  collection: 'growReports',
+  collection: 'diary',
 };
 
 @Schema(options)
-export class GrowReport extends Document {
+export class Diary extends Document {
   @Prop({
     type: Types.ObjectId,
     required: true,
@@ -15,13 +15,13 @@ export class GrowReport extends Document {
   })
   userId: Types.ObjectId;
 
-  @Prop({ defualt: null })
-  day: Date;
-
   @Prop({
     required: true,
   })
   title: string;
+
+  @Prop({ required: true })
+  day: string;
 
   @Prop({
     required: true,
@@ -35,6 +35,11 @@ export class GrowReport extends Document {
   })
   images: Types.ObjectId;
 
+  @Prop({
+    default: false,
+  })
+  lifeEvent: boolean;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
@@ -42,8 +47,8 @@ export class GrowReport extends Document {
   updatedAt: Date;
 }
 
-const _GrowReportSchema = SchemaFactory.createForClass(GrowReport);
-_GrowReportSchema.set('toObject', { virtuals: true });
-_GrowReportSchema.set('toJSON', { virtuals: true });
+const _DiarySchema = SchemaFactory.createForClass(Diary);
+_DiarySchema.set('toObject', { virtuals: true });
+_DiarySchema.set('toJSON', { virtuals: true });
 
-export const GrowReportSchema = _GrowReportSchema;
+export const DiarySchema = _DiarySchema;

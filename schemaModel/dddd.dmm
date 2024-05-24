@@ -307,6 +307,34 @@
 					"options": ""
 				},
 				{
+					"id": "ba2bd4e7-3b82-4e6e-90d1-7c660b38b4b8",
+					"name": "contents",
+					"datatype": "String",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
+					"id": "3ea35cc0-42c7-44ea-bd8c-1d39d5022430",
+					"name": "comments",
+					"datatype": "Array",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
 					"id": "b2d5e938-6696-4369-96be-9668e40ad019",
 					"name": "images",
 					"datatype": "Buffer",
@@ -324,20 +352,6 @@
 					"id": "825d00e3-3d92-49de-8359-1771519efbe0",
 					"name": "likes",
 					"datatype": "Number",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "3ea35cc0-42c7-44ea-bd8c-1d39d5022430",
-					"name": "comments",
-					"datatype": "Array",
 					"param": "",
 					"pk": false,
 					"nn": false,
@@ -674,7 +688,7 @@
 		"d77b4fe6-4530-4569-8f6e-b6b201dff9a9": {
 			"id": "d77b4fe6-4530-4569-8f6e-b6b201dff9a9",
 			"visible": true,
-			"name": "growthReports",
+			"name": "diary",
 			"desc": "성장레포트",
 			"estimatedSize": "",
 			"cols": [
@@ -2184,7 +2198,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1715580394210
+		"lastSaved": 1716175364920
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -2217,7 +2231,7 @@
 					"referencedItemId": "76dfb892-9c01-4be8-b5c6-46896fb856c2",
 					"x": 671,
 					"y": 30,
-					"gHeight": 225,
+					"gHeight": 243,
 					"gWidth": 265,
 					"color": "#ffffff",
 					"background": "#03a9f4",

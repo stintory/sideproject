@@ -9,6 +9,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }])],
   controllers: [ImagesController],
   providers: [ImagesService, ImagesRepository],
-  exports: [ImagesRepository],
+  exports: [ImagesRepository, ImagesService],
 })
 export class ImagesModule {}
