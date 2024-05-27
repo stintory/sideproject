@@ -25,6 +25,7 @@ export class AuthController {
     console.log(userData);
     const { snsId, email } = userData;
     const result = await this.authService.login(snsId, email);
+    console.log(result);
     return res.redirect('/v1');
   }
 

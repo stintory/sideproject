@@ -659,8 +659,7 @@
 			],
 			"relations": [
 				"bc38d7a9-ea89-46db-aeea-78fb3770b303",
-				"fa2688ce-1fdb-4ce7-9764-1a8dc2b84678",
-				"cab7a538-1852-4427-9d1f-a91ddcb346b6"
+				"fa2688ce-1fdb-4ce7-9764-1a8dc2b84678"
 			],
 			"lines": [],
 			"keys": [
@@ -689,7 +688,7 @@
 			"id": "d77b4fe6-4530-4569-8f6e-b6b201dff9a9",
 			"visible": true,
 			"name": "diary",
-			"desc": "성장레포트",
+			"desc": "성장레포트\n성장레포트에서 life event기 true 인 것은 삶의 주기 그래프에 표시 ",
 			"estimatedSize": "",
 			"cols": [
 				{
@@ -778,6 +777,20 @@
 					"fk": false
 				},
 				{
+					"id": "12e7c16a-2614-4a20-b905-15f2ee54bc04",
+					"name": "lifeEvent",
+					"datatype": "Boolean",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
 					"id": "7ab5974c-5f50-42ce-946b-0924243f1bf1",
 					"name": "createdAt",
 					"datatype": "Date",
@@ -839,153 +852,6 @@
 						{
 							"id": "18392561-5ef5-4b68-b4e9-fda01cc13bda",
 							"colid": "c153bcf3-e1b1-416e-9581-6571267427b6"
-						}
-					]
-				}
-			],
-			"indexes": [],
-			"embeddable": false,
-			"generate": true,
-			"generateCustomCode": true,
-			"customCode": "",
-			"beforeScript": "",
-			"afterScript": "",
-			"others": ""
-		},
-		"05fc67b0-5586-40b4-92ac-53390260befb": {
-			"id": "05fc67b0-5586-40b4-92ac-53390260befb",
-			"visible": true,
-			"name": "lifecycles",
-			"desc": "",
-			"estimatedSize": "",
-			"cols": [
-				{
-					"id": "70ec19f3-1068-4122-b82e-be43eedd6889",
-					"name": "_id",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": true,
-					"nn": true,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "9cc74f9f-f076-41c5-9e40-5e072581e78c",
-					"name": "userId",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": true,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "d6f81c58-fe70-4723-911c-c97bcf97c173",
-					"name": "image",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": "",
-					"fk": false
-				},
-				{
-					"id": "f2d247b6-a1e8-451c-b772-1b65b1443023",
-					"name": "content",
-					"datatype": "String",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "a756c244-bc62-4107-aaa1-74d8d8b9122c",
-					"name": "day",
-					"datatype": "Date",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "16155c97-04b0-44cc-a562-b656088383aa",
-					"name": "createdAt",
-					"datatype": "Date",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
-					"id": "2ecd130c-a2be-496e-ac36-62899f2b643b",
-					"name": "updatedAt",
-					"datatype": "Date",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				}
-			],
-			"relations": [
-				"cab7a538-1852-4427-9d1f-a91ddcb346b6"
-			],
-			"lines": [],
-			"keys": [
-				{
-					"id": "ff9a5784-43d9-42db-bed1-17d882b504f7",
-					"name": "Primary",
-					"isPk": true,
-					"cols": [
-						{
-							"id": "147bc730-2e36-4055-956c-0e152fc56469",
-							"colid": "70ec19f3-1068-4122-b82e-be43eedd6889"
-						},
-						{
-							"id": "fef28a92-3510-4188-b7bf-842a4cd26ba9",
-							"colid": "9cc74f9f-f076-41c5-9e40-5e072581e78c"
-						}
-					]
-				},
-				{
-					"id": "6db5c011-1a26-471b-a6e0-e8c1803c0d7f",
-					"isPk": false,
-					"name": "lifecycle_ai_1",
-					"cols": [
-						{
-							"id": "4cce6a7a-78e1-44b6-8f17-85fdbb5bc6f0",
-							"colid": "d6f81c58-fe70-4723-911c-c97bcf97c173"
 						}
 					]
 				}
@@ -1684,6 +1550,20 @@
 					"options": ""
 				},
 				{
+					"id": "de43fbe8-cef4-4764-b714-9d586a7c5f31",
+					"name": "status",
+					"datatype": "Boolean",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
 					"id": "3cfc9cdb-8aa9-4d82-aeb6-cd36a7774503",
 					"name": "createdAt",
 					"datatype": "Date",
@@ -2025,33 +1905,6 @@
 			"customCode": "",
 			"relationColor": "transparent"
 		},
-		"cab7a538-1852-4427-9d1f-a91ddcb346b6": {
-			"id": "cab7a538-1852-4427-9d1f-a91ddcb346b6",
-			"visible": true,
-			"name": "image__id",
-			"desc": "",
-			"type": "identifying",
-			"parent_key": "6db5c011-1a26-471b-a6e0-e8c1803c0d7f",
-			"parent": "05fc67b0-5586-40b4-92ac-53390260befb",
-			"child": "084e48e5-e503-4f89-823b-e8df379f043b",
-			"c_mp": "true",
-			"c_mch": "true",
-			"c_p": "one",
-			"c_ch": "many",
-			"c_cp": "",
-			"c_cch": "",
-			"cols": [
-				{
-					"id": "a472d71f-2539-4826-9207-be48d17550c0",
-					"parentcol": "d6f81c58-fe70-4723-911c-c97bcf97c173",
-					"childcol": "331f56ce-70aa-4647-8184-aeae4fe13413"
-				}
-			],
-			"generate": true,
-			"generateCustomCode": true,
-			"customCode": "",
-			"relationColor": "transparent"
-		},
 		"c4942ec8-1dbe-4a1a-b4a3-51514f7ba475": {
 			"id": "c4942ec8-1dbe-4a1a-b4a3-51514f7ba475",
 			"visible": true,
@@ -2198,7 +2051,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1716175364920
+		"lastSaved": 1716514282789
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -2268,23 +2121,10 @@
 				},
 				"d77b4fe6-4530-4569-8f6e-b6b201dff9a9": {
 					"referencedItemId": "d77b4fe6-4530-4569-8f6e-b6b201dff9a9",
-					"x": 991,
-					"y": 452,
-					"gHeight": 171,
-					"gWidth": 201,
-					"color": "#ffffff",
-					"background": "#03a9f4",
-					"resized": false,
-					"autoExpand": true,
-					"backgroundOpacity": "10",
-					"collapsed": false
-				},
-				"05fc67b0-5586-40b4-92ac-53390260befb": {
-					"referencedItemId": "05fc67b0-5586-40b4-92ac-53390260befb",
-					"x": 1476,
-					"y": 511,
-					"gHeight": 153,
-					"gWidth": 201,
+					"x": 1284,
+					"y": 471,
+					"gHeight": 189,
+					"gWidth": 208,
 					"color": "#ffffff",
 					"background": "#03a9f4",
 					"resized": false,
@@ -2400,7 +2240,7 @@
 					"referencedItemId": "58adb5b9-9cd4-4b8f-8dc7-c15efe0419b8",
 					"x": 936,
 					"y": 838,
-					"gHeight": 135,
+					"gHeight": 153,
 					"gWidth": 201,
 					"color": "#ffffff",
 					"background": "#03a9f4",

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../schema/user.schema';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 
 @Injectable()
 export class UsersRepository {
@@ -22,6 +22,10 @@ export class UsersRepository {
         new: true,
       })
       .exec();
+  }
+
+  async updateById(id: string | Types.ObjectId, updateObject: UpdateQuery<User>): Promise<User | null> {
+    return await this.userModel.findByIdAndUpdate(id, updateObject, { new: true }).exec();
   }
 
   async findOne(filter: FilterQuery<User>): Promise<User | null> {

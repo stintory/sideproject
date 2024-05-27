@@ -53,12 +53,14 @@ export class AuthService {
     const refreshToken = await this.generateRefreshToken(user);
     const expires_in = await this.getExpToken(token);
 
+    // todo plan Id 같이 생성 해야함.
     return {
       id: user.id,
       nickname: user.nickname,
       email: user.email,
       phone: user.phone,
       phoneVerified: user.phoneVerified,
+      // planId: user.planId,
       role: user.role,
       authority: user.authority,
       access_token: token,

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaOptions } from 'mongoose';
+import { IsObject } from 'class-validator';
 
 const options: SchemaOptions = {
   versionKey: false,
@@ -8,16 +9,21 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class Plan extends Document {
-  @Prop()
-  name: string; // free, basic, premium
+  @Prop({
+    required: true,
+    enum: ['free', 'basic', 'premium'],
+  })
+  name: string;
 
   @Prop({
     type: Object,
+    required: true,
     default: {
       KRW: 0,
       USD: 0,
     },
   })
+  @IsObject()
   price: Record<string, number>;
 
   @Prop()
