@@ -36,6 +36,10 @@ export class UsersRepository {
     }
   }
 
+  async find(query: FilterQuery<User>): Promise<User[]> {
+    return this.userModel.find(query).exec();
+  }
+
   async delete(id: string): Promise<User | null> {
     return this.userModel.findByIdAndDelete(id).exec();
   }

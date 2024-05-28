@@ -22,6 +22,10 @@ export class PlansRepository {
     return await this.planModel.find(query).exec();
   }
 
+  async findOne(filter: FilterQuery<Plan>): Promise<Plan | null> {
+    return await this.planModel.findOne(filter).exec();
+  }
+
   async findById(id: string | Types.ObjectId): Promise<Plan> {
     return await this.planModel.findById(id).exec();
   }
