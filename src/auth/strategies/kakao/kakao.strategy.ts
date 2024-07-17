@@ -34,7 +34,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         const nickname = profile._json.properties.nickname;
         const provider = 'kakao';
         const snsId = id.toString();
-        const newUser = await this.authService.register({ email, nickname, provider, snsId });
+        const newUser = await this.authService.registerSns({ email, nickname, provider, snsId });
         return done(null, newUser);
       }
     } catch (error) {

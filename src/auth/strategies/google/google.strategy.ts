@@ -26,7 +26,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         console.log('already exists');
         return done(null, exUser);
       } else {
-        const newUser = await this.authService.register({ email, nickname, provider, snsId });
+        const newUser = await this.authService.registerSns({ email, nickname, provider, snsId });
         return done(null, newUser);
       }
     } catch (error) {

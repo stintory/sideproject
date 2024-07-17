@@ -162,6 +162,20 @@
 					"options": ""
 				},
 				{
+					"id": "32ec5694-01b9-47fb-b47a-408a72c3563d",
+					"name": "subscription",
+					"datatype": "Boolean",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"after": "",
+					"options": ""
+				},
+				{
 					"id": "83661b7a-e878-4f20-ab36-60e94474478e",
 					"name": "createdAt",
 					"datatype": "Date",
@@ -1550,20 +1564,6 @@
 					"options": ""
 				},
 				{
-					"id": "de43fbe8-cef4-4764-b714-9d586a7c5f31",
-					"name": "status",
-					"datatype": "Boolean",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "",
-					"defaultvalue": "",
-					"data": "",
-					"after": "",
-					"options": ""
-				},
-				{
 					"id": "3cfc9cdb-8aa9-4d82-aeb6-cd36a7774503",
 					"name": "createdAt",
 					"datatype": "Date",
@@ -2051,7 +2051,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1716514282789
+		"lastSaved": 1716536549576
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -2071,7 +2071,7 @@
 					"referencedItemId": "4b2b73c7-29e3-47dc-8b85-50e6b72fd1d5",
 					"x": 49,
 					"y": 299,
-					"gHeight": 459,
+					"gHeight": 477,
 					"gWidth": 232,
 					"color": "#ffffff",
 					"background": "#03a9f4",
@@ -2240,7 +2240,7 @@
 					"referencedItemId": "58adb5b9-9cd4-4b8f-8dc7-c15efe0419b8",
 					"x": 936,
 					"y": 838,
-					"gHeight": 153,
+					"gHeight": 135,
 					"gWidth": 201,
 					"color": "#ffffff",
 					"background": "#03a9f4",

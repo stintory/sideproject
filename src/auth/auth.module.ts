@@ -11,6 +11,7 @@ import { HttpModule } from '@nestjs/axios';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
 import { GoogleStrategy } from './strategies/google/google.strategy';
+import { JwtRefreshTokenStrategy } from './strategies/jwt/jwt.refreshToken.strategy';
 
 @Module({
   imports: [
@@ -20,7 +21,15 @@ import { GoogleStrategy } from './strategies/google/google.strategy';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, KakaoStrategy, GoogleStrategy, UsersRepository, JwtStrategy],
-  exports: [AuthRepository, AuthService, KakaoStrategy, GoogleStrategy],
+  providers: [
+    AuthService,
+    AuthRepository,
+    KakaoStrategy,
+    GoogleStrategy,
+    UsersRepository,
+    JwtStrategy,
+    JwtRefreshTokenStrategy,
+  ],
+  exports: [AuthRepository, AuthService, KakaoStrategy, GoogleStrategy, JwtRefreshTokenStrategy, JwtStrategy],
 })
 export class AuthModule {}

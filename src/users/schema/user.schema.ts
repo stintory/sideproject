@@ -47,9 +47,9 @@ type SubscriptionType = {
 @Schema(options)
 export class User extends Document {
   @Prop({
-    required: true,
     index: true,
     unique: true,
+    default: null,
   })
   provider: string;
 
@@ -61,9 +61,9 @@ export class User extends Document {
   nickname: string;
 
   @Prop({
-    required: true,
     index: true,
     unique: true,
+    default: null,
   })
   snsId: string;
 
@@ -81,6 +81,9 @@ export class User extends Document {
     default: null,
   })
   email: string;
+
+  @Prop()
+  password: string;
 
   @Prop({
     default: null,
@@ -114,6 +117,9 @@ export class User extends Document {
 
   @Prop()
   refreshTokenExpires: Date;
+
+  @Prop({ default: Date.now })
+  lastLogin: Date;
 
   @Prop({ default: Date.now })
   createdAt: Date;

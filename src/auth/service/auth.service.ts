@@ -1,16 +1,18 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersRepository } from '../../users/repository/users.repository';
 import { AuthRepository } from '../repository/auth.repository';
 import { User } from '../../users/schema/user.schema';
 import * as jwt from 'jsonwebtoken';
 import { JwtPayload } from 'jsonwebtoken';
 import { RegisterDto } from '../dto/register.user.dto';
+import * as bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersRepository: UsersRepository, private readonly authRepository: AuthRepository) {}
 
-  async register(body: RegisterDto) {
+  async registerSns(body: RegisterDto) {
     const { email, nickname, provider, snsId } = body;
     const findUser = await this.usersRepository.findOne({ email });
     if (!findUser) {
@@ -32,6 +34,45 @@ export class AuthService {
     }
   }
 
+  async register(email: string, nickname: string, password: string) {
+    const existingUser = await this.usersRepository.findOne({ email });
+    if (existingUser) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const hasedPassword = await this.makePasswordHash(password);
+    // TODO 이메일 인증
+
+    const newUser = await this.usersRepository.create({
+      email,
+      nickname,
+      password: hasedPassword,
+    });
+
+    const token = await this.generateToken(newUser);
+    const refreshToken = await this.generateRefreshToken(newUser);
+    const expires_in = await this.getExpToken(token);
+
+    return {
+      email: newUser.email,
+      nickname: newUser.nickname,
+      access_token: token,
+      refreshToken,
+      expires_in: expires_in,
+      message: 'Successfully registered',
+    };
+  }
+
+  private async makePasswordHash(password: string): Promise<string> {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      return hashedPassword;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async validateUser(payload: any): Promise<User | null> {
     const { sub } = payload;
     const user = await this.usersRepository.findById(sub);
@@ -43,7 +84,7 @@ export class AuthService {
     return user;
   }
 
-  async login(id: string, email: string): Promise<any> {
+  async loginSns(id: string, email: string): Promise<any> {
     const user = await this.usersRepository.findOne({ snsId: id, email });
     if (!user) {
       throw new BadRequestException('user not found');
@@ -67,6 +108,56 @@ export class AuthService {
       refresh_token: refreshToken,
       expires_in: expires_in,
     };
+  }
+
+  async login(email: string, password: string): Promise<any> {
+    const user = await this.usersRepository.findOne({ email });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const isSamePassword = await this.comparePassword(password, user.toJSON().password);
+
+    if (!isSamePassword) {
+      throw new BadRequestException('invalid password');
+    }
+
+    const lastLogin = new Date();
+    const updateUser = await this.usersRepository.update(user.id, { lastLogin });
+    if (!updateUser) {
+      throw new BadRequestException('Update user failed');
+    }
+
+    const token = await this.generateToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
+    const expires_in = await this.getExpToken(token);
+    return {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      // planId: user.planId,
+      role: user.role,
+      access_token: token,
+      refresh_token: refreshToken,
+      expires_in: expires_in,
+    };
+  }
+
+  async logout(id: string) {
+    const logout = await this.usersRepository.update(id, {
+      refreshToken: null,
+      refreshTokenExpires: null,
+    });
+
+    if (logout) {
+      return { message: 'logout success' };
+    }
+  }
+
+  private async comparePassword(inputPassword: string, hashPassword: string): Promise<boolean> {
+    const isMatch = await bcrypt.compare(inputPassword, hashPassword);
+    return isMatch;
   }
 
   async generateToken(user: User): Promise<string> {
@@ -123,5 +214,35 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async validateRefreshToken(refreshToken: string, userId: any) {
+    const isValid = await this.checkIfRefreshTokenIsValid(refreshToken, userId);
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.usersRepository.findById(userId);
+    return user;
+  }
+
+  async checkIfRefreshTokenIsValid(refreshToken: string, userId): Promise<boolean> {
+    const token = await this.usersRepository.findByIdAndRefreshToken(userId, refreshToken);
+
+    return token && token.refreshTokenExpires > new Date();
+  }
+
+  async refreshAccessToken(user: User) {
+    const token = await this.generateToken(user);
+    const expires_in = await this.getExpToken(token);
+    const refreshToken = await this.generateRefreshToken(user);
+
+    return {
+      access_token: token,
+      expires_in: expires_in,
+      refresh_token: refreshToken,
+      message: 'successfully created new AccessToken',
+    };
   }
 }

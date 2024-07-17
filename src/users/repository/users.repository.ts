@@ -43,4 +43,11 @@ export class UsersRepository {
   async delete(id: string): Promise<User | null> {
     return this.userModel.findByIdAndDelete(id).exec();
   }
+
+  async findByIdAndRefreshToken(userId: string, token: string): Promise<User | null> {
+    // const result = await this.userModel.findOne({
+    //   $and: [{ _id: id }, { refreshToken: token }],
+    // });
+    return this.userModel.findOne({ _id: userId, refreshToken: token }).exec();
+  }
 }
