@@ -26,6 +26,9 @@ export class Pet extends Document {
   name: string;
 
   @Prop()
+  image: string;
+
+  @Prop()
   age: number;
 
   @Prop({

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from '../service/posts.service';
 import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreatePostsDto } from '../dto/create.posts.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { postMulterOptions } from '../../@utils/multer.util';
@@ -34,8 +34,25 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor('image', 30, postMulterOptions))
   @ApiOperation({ summary: '게시글 생성' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'File upload',
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+        title: { type: 'string' },
+        content: { type: 'string' },
+        comments: { type: 'string' },
+      },
+      required: ['title', 'content'],
+    },
+  })
+  @UseInterceptors(FilesInterceptor('image', 30, postMulterOptions))
   async create(
     @CurrentUser() user: User,
     @Body() body: CreatePostsDto,

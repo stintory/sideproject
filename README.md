@@ -35,28 +35,19 @@ $ npm install
 ## Running the app
 
 ```bash
+# change git branch
+$ git checkout develop
+
 # development
 $ npm run start
 
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
 ## Test
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
@@ -65,7 +56,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## View Schema Model
 - Install Moon Modeler.
 - open dddd.dmm in schemaModel folder
-![view](https://github.com/stintory/boilerplate/assets/18318728/679d544c-9619-40d5-b75c-1339fe5549b1)
+![view](https://github.com/user-attachments/assets/82160373-451b-43b1-bf7a-4eed63adca71)
 
 ## Stay in touch
 

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { PetsService } from '../service/pets.service';
 import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '../../users/schema/user.schema';
 import { CurrentUser } from '../../@decorator/user.decorator';
 import { CreatePetDto } from '../dto/create.pet.dto';
@@ -17,6 +17,23 @@ export class PetsController {
 
   @Post()
   @ApiOperation({ summary: 'pet 등록' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'File upload',
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+        name: { type: 'string' },
+        age: { type: 'number' },
+        sex: { type: 'string', enum: ['MALE', 'FEMALE'] },
+        birth: { type: 'string', format: 'date' },
+      },
+    },
+  })
   async create(@CurrentUser() user: User, @Body() body: CreatePetDto) {
     const result = await this.petsService.create(user, body);
     return result;
@@ -36,7 +53,24 @@ export class PetsController {
 
   @Patch(':id')
   @ApiOperation({ summary: '정보 수정' })
+  @ApiBody({
+    description: 'Pet Image and Info Update',
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        age: { type: 'number' },
+        sex: { type: 'string', enum: ['MALE', 'FEMALE'] },
+        birth: { type: 'string', format: 'date' },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async updatePet(@Param('id', ValidateMongoIdPipe) petId: string, @Body() body: UpdatePetDto) {
+    // TODO: UpdatePetDto 사진 수정 추가.
     return await this.petsService.updatePet(petId, body);
   }
 

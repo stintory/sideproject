@@ -1,6 +1,6 @@
 import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards, Delete, Post } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/@decorator/user.decorator';
 import { User } from '../schema/user.schema';
 import { ValidateMongoIdPipe } from 'src/@common/pipes/ValidateMongoIdPipe';
@@ -11,6 +11,7 @@ import { UpdateSubscriptionDto } from '../dto/update.subscription.dto';
 import { CreateSubscriptionDto } from '../dto/create.subscription.dto';
 
 @Controller('users')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 export class UsersController {

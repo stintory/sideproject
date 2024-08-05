@@ -19,4 +19,6 @@ export class UpdatePostsDto {
   @IsOptional()
   @IsString()
   content?: string;
+
+  // TODO : image 수정
 }

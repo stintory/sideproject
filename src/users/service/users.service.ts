@@ -12,12 +12,17 @@ export class UsersService {
   }
 
   async updateUser(userId: string, updateUser: UpdateUserDto) {
-    const update = await this.usersRepository.update(userId, updateUser);
-    if (update) {
-      return {
-        ...updateUser.readOnlyData,
-        message: 'Updated successfully',
-      };
+    const result = await this.usersRepository.update(userId, updateUser);
+    if (result) {
+      const updatedUser = await this.usersRepository.findById(userId);
+      if (updatedUser) {
+        return {
+          ...updatedUser.readOnlyData,
+          message: 'Updated user success.',
+        };
+      } else {
+        throw new BadRequestException('User not found');
+      }
     } else {
       throw new BadRequestException('Update user failed');
     }

@@ -1,17 +1,7 @@
-import { APP_FILTER } from '@nestjs/core';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsEmail } from 'class-validator';
+import { IsOptional, IsString, IsEmail, IsBoolean } from 'class-validator';
 
 export class UpdateUserDto {
-  [x: string]: any;
-  @ApiProperty({
-    example: 'male ? female',
-    description: '성별',
-  })
-  @IsString()
-  @IsOptional()
-  sex?: string;
-
   @ApiProperty({
     example: 'ddd@gmail.com',
     description: '유저 이메일',
@@ -45,18 +35,10 @@ export class UpdateUserDto {
   phone?: string;
 
   @ApiProperty({
-    example: '2021-01-01',
-    description: '애완견 생일',
-  })
-  @IsString()
-  @IsOptional()
-  birth?: string;
-
-  @ApiProperty({
-    example: 'adfasdfasdfascd',
+    example: 'true or false',
     description: '연락처 인증 여부',
   })
-  @IsString()
+  @IsBoolean()
   @IsOptional()
   phoneVerified?: boolean;
 }
