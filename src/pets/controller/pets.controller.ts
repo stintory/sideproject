@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PetsService } from '../service/pets.service';
 import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -7,6 +19,8 @@ import { CurrentUser } from '../../@decorator/user.decorator';
 import { CreatePetDto } from '../dto/create.pet.dto';
 import { ValidateMongoIdPipe } from '../../@common/pipes/ValidateMongoIdPipe';
 import { UpdatePetDto } from '../dto/update.pet.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { postMulterOptions } from '../../@utils/multer.util';
 
 @Controller('pets')
 @UseGuards(JwtAuthGuard)
@@ -34,8 +48,9 @@ export class PetsController {
       },
     },
   })
-  async create(@CurrentUser() user: User, @Body() body: CreatePetDto) {
-    const result = await this.petsService.create(user, body);
+  @UseInterceptors(FilesInterceptor('image', 1, postMulterOptions))
+  async create(@CurrentUser() user: User, @Body() body: CreatePetDto, @UploadedFile() file?: Express.Multer.File) {
+    const result = await this.petsService.create(user, body, file);
     return result;
   }
 

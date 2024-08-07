@@ -54,6 +54,9 @@ export class Post extends Document {
   @Prop()
   likes: number;
 
+  @Prop({ default: false })
+  growthReport: boolean;
+
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }], default: null })
   comments: Types.ObjectId[];
 

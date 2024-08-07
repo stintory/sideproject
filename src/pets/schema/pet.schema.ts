@@ -44,10 +44,21 @@ export class Pet extends Document {
 
   @Prop({ default: null })
   updatedAt: Date;
+
+  readonly petInfo: {
+    id: string;
+    name: string;
+  };
 }
 
 const _PetSchema = SchemaFactory.createForClass(Pet);
 _PetSchema.set('toObject', { virtuals: true });
 _PetSchema.set('toJSON', { virtuals: true });
+_PetSchema.virtual('petInfo').get(function (this: Pet) {
+  return {
+    id: this.id,
+    name: this.name,
+  };
+});
 
 export const PetSchema = _PetSchema;

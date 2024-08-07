@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Pet } from '../schema/pet.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 
 @Injectable()
 export class PetsRepository {
@@ -13,7 +13,11 @@ export class PetsRepository {
     return await this.petModel.create(pet);
   }
 
-  async findAll(userId: string | Types.ObjectId) {
+  async find(query: FilterQuery<Pet>): Promise<Pet[]> {
+    return await this.petModel.find(query).exec();
+  }
+
+  async findAll(userId: string | Types.ObjectId): Promise<Pet[]> {
     return await this.petModel.find({ userId }).exec();
   }
 

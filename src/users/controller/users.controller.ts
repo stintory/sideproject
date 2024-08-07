@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
 import { SubscriptionsService } from '../service/subscriptions.service';
 import { UpdateSubscriptionDto } from '../dto/update.subscription.dto';
 import { CreateSubscriptionDto } from '../dto/create.subscription.dto';
+import { PetsService } from '../../pets/service/pets.service';
 
 @Controller('users')
 @ApiBearerAuth('JWT-auth')
@@ -17,6 +18,7 @@ import { CreateSubscriptionDto } from '../dto/create.subscription.dto';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly petsService: PetsService,
     private readonly subscriptionsService: SubscriptionsService,
   ) {}
 
@@ -27,9 +29,14 @@ export class UsersController {
     description: '사용자 정보를 조회합니다.',
   })
   async getUser(@CurrentUser() user: User) {
-    return {
-      result: user.readOnlyData,
+    const petsResult = await this.petsService.findAll(user);
+    const pets = petsResult.result;
+    const petIds = await Promise.all(pets.map(async (pet) => pet.petInfo));
+    const userResult = {
+      ...user.readOnlyData,
+      petIds,
     };
+    return { data: userResult };
   }
 
   @Patch(':id')

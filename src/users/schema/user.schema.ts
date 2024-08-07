@@ -145,6 +145,7 @@ export class User extends Document {
     provider: string;
     nickname: string;
     role: string;
+    isSub: boolean;
   };
 
   readonly subscriptionInfo: {
@@ -162,6 +163,7 @@ _UserSchema.virtual('readOnlyData').get(function (this: User) {
     provider: this.provider,
     nickname: this.nickname,
     role: this.role,
+    isSub: this.isSub,
   };
 });
 

@@ -14,6 +14,11 @@ export class Image extends Document {
   name: string;
 
   @Prop({
+    default: false,
+  })
+  growthReport: boolean;
+
+  @Prop({
     required: false,
   })
   src: string;

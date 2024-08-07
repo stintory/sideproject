@@ -13,12 +13,16 @@ import { PortOneService } from '../@api/portone.service';
 import { PlansRepository } from '../plans/repository/plans.repository';
 import { AuthRepository } from '../auth/repository/auth.repository';
 import { HttpModule } from '@nestjs/axios';
+import { PetsService } from '../pets/service/pets.service';
+import { PetsRepository } from '../pets/reppository/pets.repository';
+import { Pet, PetSchema } from '../pets/schema/pet.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Plan.name, schema: PlanSchema },
+      { name: Pet.name, schema: PetSchema },
     ]),
     TransactionsModule,
     HttpModule,
@@ -27,6 +31,8 @@ import { HttpModule } from '@nestjs/axios';
   providers: [
     UsersService,
     UsersRepository,
+    PetsService,
+    PetsRepository,
     SubscriptionsService,
     AuthService,
     AuthRepository,
