@@ -36,4 +36,10 @@ export class PostsRepository {
         .exec()
     );
   }
+
+  async findByIdAndCommentDelete(id: string | Types.ObjectId, commentId: string): Promise<Post> {
+    const result = await this.postModel.findByIdAndUpdate(id, { $pull: { comments: commentId } }, { new: true }).exec();
+
+    return result;
+  }
 }

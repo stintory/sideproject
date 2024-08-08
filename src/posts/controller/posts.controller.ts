@@ -86,18 +86,6 @@ export class PostsController {
     return this.postsService.deletePost(postId);
   }
 
-  // ===================================================
-  // 댓글 생성
-  @Post(':id/comment')
-  @ApiOperation({ summary: '댓글 생성' })
-  async createComment(
-    @Param('id', ValidateMongoIdPipe) postId: string,
-    @CurrentUser() user: User,
-    @Body() body: CreateCommentDto,
-  ) {
-    return this.postsService.createComment(postId, user, body);
-  }
-
   //TODO: 게시글 좋아요 및 좋아요
 
   //TODO: 게시글 좋아요 취소.

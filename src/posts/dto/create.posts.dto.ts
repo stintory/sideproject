@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostsDto {
   @ApiProperty({
@@ -26,4 +26,13 @@ export class CreatePostsDto {
   @IsOptional()
   @IsString()
   comments: string;
+
+  @ApiProperty({
+    required: false,
+    example: 'growthReport',
+    description: '성장기록',
+  })
+  @IsOptional()
+  @IsBoolean()
+  growthReport: boolean;
 }

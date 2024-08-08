@@ -48,7 +48,7 @@ export class Post extends Document {
   })
   content: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Image' }], default: null })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Image' }], required: false })
   images: Types.ObjectId[];
 
   @Prop()
@@ -57,7 +57,7 @@ export class Post extends Document {
   @Prop({ default: false })
   growthReport: boolean;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }], default: null })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }] })
   comments: Types.ObjectId[];
 
   // @Prop({ type: [Types.ObjectId], ref: 'Comment', default: null })

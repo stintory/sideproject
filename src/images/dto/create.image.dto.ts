@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateImageDto {
   @ApiProperty({
@@ -11,24 +11,11 @@ export class CreateImageDto {
   name: string;
 
   @ApiProperty({
-    default: false,
-    example: 'growthReport',
-    description: '성장 보고서(true)',
+    required: true,
+    example: true,
+    description: '성장 보고서',
   })
+  @IsOptional()
   @IsBoolean()
-  growthReport: boolean;
-
-  @ApiProperty({
-    required: false,
-    example: 'https://example.com/image1.jpg',
-    description: '이미지 URL',
-  })
-  src: string;
-
-  @ApiProperty({
-    required: false,
-    example: 'image/jpeg',
-    description: '이미지 MIME Type',
-  })
-  type: string;
+  growthReport?: boolean;
 }

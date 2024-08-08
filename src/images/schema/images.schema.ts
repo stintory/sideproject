@@ -1,4 +1,4 @@
-import { Document, SchemaOptions } from 'mongoose';
+import { Document, SchemaOptions, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 const options: SchemaOptions = {
@@ -9,14 +9,29 @@ const options: SchemaOptions = {
 @Schema(options)
 export class Image extends Document {
   @Prop({
-    required: true,
+    type: Types.ObjectId,
+    required: false,
+    ref: 'users',
   })
+  userId: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    required: false,
+    ref: 'posts',
+  })
+  postId: Types.ObjectId;
+
+  @Prop()
   name: string;
 
   @Prop({
     default: false,
   })
   growthReport: boolean;
+
+  @Prop()
+  filename: string;
 
   @Prop({
     required: false,

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/strategies/jwt/jwt.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../service/comments.service';
@@ -8,6 +8,7 @@ import { PaginationDecorator } from '../../@decorator/pagination/pagination.deco
 import { PaginationOptions } from '../../@interface/pagination.interface';
 import { ValidateMongoIdPipe } from '../../@common/pipes/ValidateMongoIdPipe';
 import { UpdateCommentDto } from '../dto/update.comment.dto';
+import { CreateCommentDto } from '../dto/create.comment.dto';
 
 @Controller('comments')
 @UseGuards(JwtAuthGuard)
@@ -15,6 +16,12 @@ import { UpdateCommentDto } from '../dto/update.comment.dto';
 @ApiTags('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
+
+  @Post()
+  @ApiOperation({ summary: '댓글 생성' })
+  async createComment(@CurrentUser() user: User, @Query('postId') postId: string, @Body() body: CreateCommentDto) {
+    return this.commentsService.createComment(user, postId, body);
+  }
 
   @Get()
   @ApiOperation({ summary: '댓글 전체 조회' })

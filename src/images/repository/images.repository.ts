@@ -11,4 +11,9 @@ export class ImagesRepository {
     const newImage = await this.ImageModel.create(image);
     return newImage.save();
   }
+
+  async create(images: Partial<Image>[]): Promise<Image[]> {
+    const result = (await this.ImageModel.insertMany(images)) as Image[];
+    return result;
+  }
 }

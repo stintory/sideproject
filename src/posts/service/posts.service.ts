@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PostsRepository } from '../repository/posts.repository';
 import { CreatePostsDto } from '../dto/create.posts.dto';
 import { ImagesRepository } from '../../images/repository/images.repository';
-import { v4 } from 'uuid';
 import { PaginationOptions, PaginationResult } from '../../@interface/pagination.interface';
 import { Post } from '../schema/posts.schema';
 import { Model, Types } from 'mongoose';
@@ -20,42 +19,54 @@ export class PostsService {
 
   async create(user, body: CreatePostsDto, files: Express.Multer.File[]) {
     try {
-      const { title, content } = body;
+      const { title, content, growthReport } = body;
       const userId = user._id;
+      const growthReportFlag = growthReport ?? false;
 
-      let imageIds: string[] = [];
-
-      if (files) {
-        for (let i = 0, len = files.length; i < len; i++) {
-          const hash = v4().replace(/-/g, '').slice(0, 24);
-          files[i].filename = `${Date.now()}_${hash}_${files[i].originalname}`;
-        }
-        imageIds = await Promise.all(files.map((image) => this.uploadImage(image)));
-      }
       const newPostData: any = {
         title,
         content,
         userId,
       };
 
-      if (imageIds.length > 0) {
-        newPostData.images = imageIds;
+      const newPost = await this.postsRepository.create(newPostData);
+
+      let imageIds: string[] = [];
+
+      if (files && files.length > 0) {
+        const processedFiles = files.map((file) => {
+          file.filename = `${Date.now()}_${file.originalname}`;
+          return file;
+        });
+
+        imageIds = await Promise.all(
+          processedFiles.map((file) => this.uploadImage(file, growthReportFlag, newPost._id, userId)),
+        );
       }
 
-      const newPost = await this.postsRepository.create(newPostData);
-      const result = newPost.getInfo;
+      if (imageIds.length > 0) {
+        await this.postsRepository.findByIdAndUpdate(newPost._id, { images: imageIds });
+      }
+
+      const resultUpdated = await this.postsRepository.findById(newPost._id);
+      const result = resultUpdated.getInfo;
+
       return { result };
     } catch (err) {
       throw new BadRequestException(err.message);
     }
   }
 
-  async uploadImage(image: any) {
-    const { originalname, mimetype } = image;
-    const name = originalname;
-    const type = mimetype;
+  async uploadImage(image: Express.Multer.File, growthReport: boolean, postId, userId) {
+    const { filename, mimetype } = image;
 
-    const uploadedImage = await this.imagesRepository.uploadImage({ name, type });
+    const uploadedImage = await this.imagesRepository.uploadImage({
+      filename,
+      type: mimetype,
+      growthReport,
+      postId,
+      userId,
+    });
     if (!uploadedImage) {
       throw new BadRequestException('이미지 업로드에 실패하였습니다.');
     }
@@ -132,41 +143,6 @@ export class PostsService {
     try {
       await this.postsRepository.deleteById(postId);
       return { message: 'Post deleted' };
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  async createComment(id, user, body) {
-    try {
-      const userId = user._id;
-      const { comment } = body;
-      const postId = new Types.ObjectId(id);
-      const findPost = await this.postsRepository.findById(postId);
-      if (!findPost) {
-        throw new BadRequestException('Not exist Post');
-      }
-
-      const createdComment = await this.commentsRepository.create({ comment, userId, postId });
-      if (!createdComment) {
-        throw new BadRequestException('Create comment failed');
-      }
-
-      const updatedPost = await this.postsRepository.findByIdAndCommentUpdate(postId, {
-        comments: createdComment.id,
-      });
-
-      if (!updatedPost) {
-        throw new BadRequestException('Update post with comment failed');
-      }
-
-      const result = {
-        comment: updatedPost.comments,
-      };
-
-      return {
-        result,
-      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

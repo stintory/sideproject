@@ -27,9 +27,8 @@ export class ImagesController {
           format: 'binary',
         },
         name: { type: 'string' },
-        age: { type: 'number' },
-        sex: { type: 'string', enum: ['MALE', 'FEMALE'] },
-        birth: { type: 'string', format: 'date' },
+        growthReport: { type: 'boolean' },
+        src: { type: 'string' },
       },
     },
   })
@@ -39,6 +38,6 @@ export class ImagesController {
     @Body() body: CreateImageDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    const result = await this.imagesService.create(user, body, files);
+    return await this.imagesService.create(user, body, files);
   }
 }
