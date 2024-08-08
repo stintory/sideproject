@@ -1,9 +1,6 @@
-import { Injectable, UploadedFiles } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
+import { Injectable } from '@nestjs/common';
 import { ImagesRepository } from '../repository/images.repository';
 import { User } from '../../users/schema/user.schema';
-import { CurrentUser } from '../../@decorator/user.decorator';
 import { CreateImageDto } from '../dto/create.image.dto';
 
 @Injectable()

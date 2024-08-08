@@ -15,13 +15,6 @@ export class Image extends Document {
   })
   userId: Types.ObjectId;
 
-  @Prop({
-    type: Types.ObjectId,
-    required: false,
-    ref: 'posts',
-  })
-  postId: Types.ObjectId;
-
   @Prop()
   name: string;
 

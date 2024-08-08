@@ -39,9 +39,7 @@ export class PostsService {
           return file;
         });
 
-        imageIds = await Promise.all(
-          processedFiles.map((file) => this.uploadImage(file, growthReportFlag, newPost._id, userId)),
-        );
+        imageIds = await Promise.all(processedFiles.map((file) => this.uploadImage(file, growthReportFlag, userId)));
       }
 
       if (imageIds.length > 0) {
@@ -57,14 +55,13 @@ export class PostsService {
     }
   }
 
-  async uploadImage(image: Express.Multer.File, growthReport: boolean, postId, userId) {
+  async uploadImage(image: Express.Multer.File, growthReport: boolean, userId) {
     const { filename, mimetype } = image;
 
     const uploadedImage = await this.imagesRepository.uploadImage({
       filename,
       type: mimetype,
       growthReport,
-      postId,
       userId,
     });
     if (!uploadedImage) {
@@ -141,6 +138,7 @@ export class PostsService {
 
   async deletePost(postId: string) {
     try {
+      // TODO: 해당 포스트를 삭제하면 관련된 이미지도 같이 삭제.
       await this.postsRepository.deleteById(postId);
       return { message: 'Post deleted' };
     } catch (error) {
