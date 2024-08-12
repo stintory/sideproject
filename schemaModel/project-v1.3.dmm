@@ -2176,7 +2176,7 @@
 		"replaceSpace": "_",
 		"color": "transparent",
 		"sideSelections": true,
-		"isDirty": true,
+		"isDirty": false,
 		"storedin": {
 			"major": 7,
 			"minor": 4,
@@ -2193,7 +2193,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1722997001195
+		"lastSaved": 1723099818857
 	},
 	"otherObjects": {},
 	"diagrams": {

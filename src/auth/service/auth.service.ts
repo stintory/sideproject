@@ -7,6 +7,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { RegisterDto } from '../dto/register.user.dto';
 import * as bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import { SignUpDto } from '../../users/dto/signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,8 @@ export class AuthService {
     }
   }
 
-  async register(email: string, nickname: string, password: string) {
+  async register(body: SignUpDto) {
+    const { email, password, nickname, gender, name, phone, birth } = body;
     const existingUser = await this.usersRepository.findOne({ email });
     if (existingUser) {
       throw new BadRequestException('Email already exists');
@@ -43,22 +45,31 @@ export class AuthService {
     const hasedPassword = await this.makePasswordHash(password);
     // TODO 이메일 인증
 
+    if (!['male', 'female'].includes(gender)) {
+      throw new BadRequestException('Invalid gender');
+    }
+
     const newUser = await this.usersRepository.create({
       email,
-      nickname,
       password: hasedPassword,
+      nickname,
+      gender,
+      name,
+      phone,
+      birth,
     });
 
-    const token = await this.generateToken(newUser);
-    const refreshToken = await this.generateRefreshToken(newUser);
-    const expires_in = await this.getExpToken(token);
+    // const token = await this.generateToken(newUser);
+    // const refreshToken = await this.generateRefreshToken(newUser);
+    // const expires_in = await this.getExpToken(token);
 
     return {
       email: newUser.email,
       nickname: newUser.nickname,
-      access_token: token,
-      refreshToken,
-      expires_in: expires_in,
+      gender,
+      name,
+      phone,
+      birth,
       message: 'Successfully registered',
     };
   }
@@ -136,7 +147,11 @@ export class AuthService {
       id: user.id,
       email: user.email,
       nickname: user.nickname,
-      // planId: user.planId,
+      name: user.name,
+      phone: user.phone,
+      phoneVerified: user.phoneVerified,
+      gender: user.gender,
+      birth: user.birth,
       role: user.role,
       access_token: token,
       refresh_token: refreshToken,

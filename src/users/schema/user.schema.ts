@@ -47,6 +47,16 @@ type SubscriptionType = {
 @Schema(options)
 export class User extends Document {
   @Prop({
+    required: true,
+    unique: true,
+    index: true,
+  })
+  email: string;
+
+  @Prop({ required: true })
+  password: string;
+
+  @Prop({
     index: true,
     unique: true,
     default: null,
@@ -59,6 +69,21 @@ export class User extends Document {
     unique: true,
   })
   nickname: string;
+
+  @Prop({
+    required: true,
+  })
+  name: string;
+
+  @Prop({
+    required: true,
+  })
+  gender: string;
+
+  @Prop({
+    required: true,
+  })
+  birth: string;
 
   @Prop({
     index: true,
@@ -76,14 +101,6 @@ export class User extends Document {
 
   @Prop({ default: null })
   members: MembersType[];
-
-  @Prop({
-    default: null,
-  })
-  email: string;
-
-  @Prop()
-  password: string;
 
   @Prop({
     default: null,
