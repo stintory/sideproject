@@ -56,11 +56,7 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({
-    index: true,
-    unique: true,
-    default: null,
-  })
+  @Prop()
   provider: string;
 
   @Prop({
@@ -85,11 +81,7 @@ export class User extends Document {
   })
   birth: string;
 
-  @Prop({
-    index: true,
-    unique: true,
-    default: null,
-  })
+  @Prop()
   snsId: string;
 
   @Prop({
@@ -159,7 +151,6 @@ export class User extends Document {
 
   readonly readOnlyData: {
     _id: string;
-    provider: string;
     nickname: string;
     role: string;
     isSub: boolean;
@@ -177,7 +168,6 @@ _UserSchema.set('toJSON', { virtuals: true });
 _UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     _id: this._id,
-    provider: this.provider,
     nickname: this.nickname,
     role: this.role,
     isSub: this.isSub,
