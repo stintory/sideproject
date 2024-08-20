@@ -33,7 +33,7 @@ export class UsersController {
     const pets = petsResult.result;
     const petIds = await Promise.all(pets.map(async (pet) => pet.petInfo));
     const userResult = {
-      ...user.readOnlyData,
+      ...user.getMe,
       petIds,
     };
     return { data: userResult };

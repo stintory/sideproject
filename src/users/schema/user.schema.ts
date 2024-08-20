@@ -157,6 +157,19 @@ export class User extends Document {
     isSub: boolean;
   };
 
+  readonly getMe: {
+    _id: string;
+    email: string;
+    nickname: string;
+    name: string;
+    phone: string;
+    phoneVerified: boolean;
+    gender: string;
+    birth: string;
+    role: string;
+    isSub: boolean;
+  };
+
   readonly subscriptionInfo: {
     subscription: SubscriptionType;
   };
@@ -171,6 +184,21 @@ _UserSchema.virtual('readOnlyData').get(function (this: User) {
     _id: this._id,
     email: this.email,
     nickname: this.nickname,
+    role: this.role,
+    isSub: this.isSub,
+  };
+});
+
+_UserSchema.virtual('getMe').get(function (this: User) {
+  return {
+    _id: this._id,
+    email: this.email,
+    nickname: this.nickname,
+    name: this.name,
+    phone: this.phone,
+    phoneVerified: this.phoneVerified,
+    gender: this.gender,
+    birth: this.birth,
     role: this.role,
     isSub: this.isSub,
   };
