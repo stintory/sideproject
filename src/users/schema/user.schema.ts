@@ -151,6 +151,7 @@ export class User extends Document {
 
   readonly readOnlyData: {
     _id: string;
+    email: string;
     nickname: string;
     role: string;
     isSub: boolean;
@@ -168,6 +169,7 @@ _UserSchema.set('toJSON', { virtuals: true });
 _UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     _id: this._id,
+    email: this.email,
     nickname: this.nickname,
     role: this.role,
     isSub: this.isSub,
