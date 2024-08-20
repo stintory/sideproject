@@ -19,6 +19,30 @@ export class UpdateUserDto {
   nickname?: string;
 
   @ApiProperty({
+    example: 'male or female',
+    description: '유저 성별',
+  })
+  @IsOptional()
+  @IsString()
+  gender?: string;
+
+  @ApiProperty({
+    example: '홍길동',
+    description: '유저 이름',
+  })
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @ApiProperty({
+    example: '1990-01-01',
+    description: '유저 생년월일',
+  })
+  @IsString()
+  @IsOptional()
+  birth?: string;
+
+  @ApiProperty({
     example: '010-111-1234',
     description: '유저 연락처',
   })

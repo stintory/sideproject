@@ -205,7 +205,7 @@ _UserSchema.virtual('updateUser').get(function (this: User) {
     _id: this._id,
     email: this.email,
     nickname: this.nickname,
-    sex: this.gender,
+    gender: this.gender,
     name: this.name,
     birth: this.birth,
     phone: this.phone,
