@@ -17,7 +17,7 @@ export class UsersService {
       const updatedUser = await this.usersRepository.findById(userId);
       if (updatedUser) {
         return {
-          ...updatedUser.readOnlyData,
+          ...updatedUser.updateUser,
           message: 'Updated user success.',
         };
       } else {

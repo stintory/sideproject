@@ -157,6 +157,17 @@ export class User extends Document {
     isSub: boolean;
   };
 
+  readonly updateUser: {
+    _id: string;
+    email: string;
+    nickname: string;
+    sex: string;
+    name: string;
+    birth: string;
+    phone: string;
+    phoneVerified: boolean;
+  };
+
   readonly getMe: {
     _id: string;
     email: string;
@@ -186,6 +197,19 @@ _UserSchema.virtual('readOnlyData').get(function (this: User) {
     nickname: this.nickname,
     role: this.role,
     isSub: this.isSub,
+  };
+});
+
+_UserSchema.virtual('updateUser').get(function (this: User) {
+  return {
+    _id: this._id,
+    email: this.email,
+    nickname: this.nickname,
+    sex: this.gender,
+    name: this.name,
+    birth: this.birth,
+    phone: this.phone,
+    phoneVerified: this.phoneVerified,
   };
 });
 
