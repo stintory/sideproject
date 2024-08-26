@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+
+type Authority = 'friend' | 'family' | 'none';
 
 export class CreatePostsDto {
   @ApiProperty({
@@ -35,4 +37,13 @@ export class CreatePostsDto {
   @IsOptional()
   @IsBoolean()
   growthReport: boolean;
+
+  @ApiProperty({
+    required: false,
+    example: 'none',
+    description: '권한',
+  })
+  @IsOptional()
+  @IsEnum(['friend', 'family', 'none'])
+  authority?: Authority;
 }

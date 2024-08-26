@@ -12,10 +12,10 @@ export class DiaryService {
     try {
       const { title, content, day } = body;
       const userId = user._id;
-      let imageIds: string[] = [];
+      let imagesData: { _id: Types.ObjectId; src: string }[] = [];
 
       if (files && files.length > 0) {
-        imageIds = await Promise.all(files.map((image) => this.uploadImage(image)));
+        imagesData = await Promise.all(files.map((image) => this.uploadImage(image, userId)));
       }
 
       const newDiaryData: any = {
@@ -23,7 +23,7 @@ export class DiaryService {
         content,
         day,
         userId,
-        images: imageIds,
+        images: imagesData,
       };
       const result = await this.diaryRepository.create(newDiaryData);
       return { result };
@@ -32,18 +32,18 @@ export class DiaryService {
     }
   }
 
-  async uploadImage(image: any) {
+  async uploadImage(image: Express.Multer.File, userId): Promise<{ _id: Types.ObjectId; src: string }> {
     const { originalname, filename, mimetype, path } = image;
     const name = originalname;
     const type = mimetype;
     const src = path;
 
-    const uploadedImage = await this.imagesRepository.uploadImage({ filename, name, type, src });
+    const uploadedImage = await this.imagesRepository.uploadImage({ filename, name, type, src, userId });
     if (!uploadedImage) {
       throw new BadRequestException('이미지 업로드에 실패하였습니다.');
     }
 
-    return uploadedImage._id;
+    return { _id: uploadedImage._id, src: uploadedImage.src };
   }
 
   async findAll(user) {

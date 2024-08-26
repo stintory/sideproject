@@ -19,33 +19,35 @@ export class PostsService {
 
   async create(user, body: CreatePostsDto, files: Express.Multer.File[]) {
     try {
-      const { title, content, growthReport } = body;
+      const { title, content, growthReport, authority } = body;
       const userId = user._id;
       const growthReportFlag = growthReport ?? false;
+      const newAuthority = authority ?? 'none';
 
       const newPostData: any = {
         title,
         content,
         userId,
         growthReport: growthReportFlag,
+        authority: newAuthority,
       };
 
       const newPost = await this.postsRepository.create(newPostData);
 
-      let imageIds: string[] = [];
+      let imagesData: { _id: Types.ObjectId; src: string }[] = [];
 
       if (files && files.length > 0) {
-        imageIds = await Promise.all(files.map((file) => this.uploadImage(file, growthReportFlag, userId)));
+        imagesData = await Promise.all(files.map((file) => this.uploadImage(file, growthReportFlag, userId)));
       }
 
-      if (imageIds.length > 0) {
-        await this.postsRepository.findByIdAndUpdate(newPost._id, { images: imageIds });
+      if (imagesData.length > 0) {
+        await this.postsRepository.findByIdAndUpdate(newPost._id, { images: imagesData });
       }
 
-      const resultUpdated = await this.postsRepository.findById(newPost._id);
+      const resultUpdated = await this.postsRepository.findByIdWithImage({ _id: newPost._id });
+      console.log(resultUpdated);
       const result = resultUpdated.getInfo;
-
-      return { result };
+      return result;
     } catch (err) {
       throw new BadRequestException(err.message);
     }
@@ -65,7 +67,7 @@ export class PostsService {
       throw new BadRequestException('이미지 업로드에 실패하였습니다.');
     }
 
-    return uploadedImage._id;
+    return { _id: uploadedImage._id, src: uploadedImage.src };
   }
 
   async findAll(user, paginationOptions: PaginationOptions): Promise<PaginationResult<Post>> {
@@ -113,14 +115,14 @@ export class PostsService {
 
   async updatePost(postId: string, body) {
     try {
-      const { title, content } = body;
+      const { title, content, authority } = body;
       const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
         throw new BadRequestException('Not exist Post');
       }
       const updatedAt = new Date(Date.now());
 
-      const updatePost = await this.postsRepository.findByIdAndUpdate(postId, { title, content, updatedAt });
+      const updatePost = await this.postsRepository.findByIdAndUpdate(postId, { title, content, authority, updatedAt });
 
       return {
         result: {

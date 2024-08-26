@@ -7,29 +7,7 @@ const options: SchemaOptions = {
   collection: 'posts',
 };
 
-type AuthorityType = {
-  friends: {
-    read: boolean;
-    download: boolean;
-  };
-  family: {
-    read: boolean;
-    download: boolean;
-  };
-};
-
-const defaultAuthority: AuthorityType = {
-  friends: {
-    read: false,
-    download: false,
-  },
-  family: {
-    read: false,
-    download: false,
-  },
-};
-
-// userId, title, images[], likes, comments, createdAtm updatedAt, authority.
+type Authority = 'friend' | 'family' | 'none';
 
 @Schema(options)
 export class Post extends Document {
@@ -49,8 +27,19 @@ export class Post extends Document {
   })
   content: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, required: true, ref: 'Image' }] })
-  images: Types.ObjectId[];
+  // @Prop({ type: [{ type: Types.ObjectId, required: true, ref: 'Image' }] })
+  // images: Types.ObjectId[];
+
+  @Prop({
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Image', required: true },
+        src: { type: String, required: true },
+      },
+    ],
+    default: [],
+  })
+  images: { _id: Types.ObjectId; src: string }[];
 
   @Prop()
   likes: number;
@@ -65,10 +54,10 @@ export class Post extends Document {
   // comments: Types.ObjectId[];
 
   @Prop({
-    type: Object,
-    default: defaultAuthority,
+    enum: ['friend', 'family', 'none'],
+    default: 'none',
   })
-  authority: AuthorityType;
+  authority: Authority;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -77,13 +66,14 @@ export class Post extends Document {
   updatedAt: Date;
 
   readonly getInfo: {
-    id: string;
+    _id: Types.ObjectId;
     title: string;
     content: string;
     comments: Types.ObjectId[];
     likes: number;
     growthReport: boolean;
-    images: Types.ObjectId[];
+    authority: Authority;
+    images: { _id: Types.ObjectId; src: string }[];
     createdAt: string;
     updatedAt: string;
   };
@@ -99,13 +89,17 @@ _PostSchema.virtual('getInfo').get(function (this: Post) {
     comments: this.comments,
     likes: this.likes,
     growthReport: this.growthReport,
-    images: this.images,
+    authority: this.authority,
+    images: this.images.map((image) => ({
+      _id: image._id,
+      src: image.src,
+    })),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };
 });
 
 _PostSchema.set('toObject', { virtuals: false });
-_PostSchema.set('toJSON', { virtuals: false });
+_PostSchema.set('toJSON', { virtuals: true });
 
 export const PostSchema = _PostSchema;

@@ -20,20 +20,7 @@ type MemberUserType = {
   role: string;
 };
 
-type friendType = {
-  read: boolean;
-  download: boolean;
-};
-
-type familyType = {
-  read: boolean;
-  download: boolean;
-};
-
-type AuthorityType = {
-  friend: friendType;
-  family: familyType;
-};
+type Authority = 'friend' | 'family' | 'none';
 
 type SubscriptionType = {
   lastPayment: Date;
@@ -105,9 +92,10 @@ export class User extends Document {
   phoneVerified: boolean;
 
   @Prop({
-    default: null,
+    enum: ['friend', 'family', 'none'],
+    default: 'none',
   })
-  authority: AuthorityType[];
+  authority: Authority;
 
   @Prop({
     type: Types.ObjectId,

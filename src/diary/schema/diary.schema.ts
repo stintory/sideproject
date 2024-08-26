@@ -29,11 +29,15 @@ export class Diary extends Document {
   content: string;
 
   @Prop({
-    type: Types.ObjectId,
-    required: false,
-    ref: 'images',
+    type: [
+      {
+        _id: { type: Types.ObjectId, ref: 'Image', required: true },
+        src: { type: String, required: true },
+      },
+    ],
+    default: [],
   })
-  images: Types.ObjectId;
+  images: { _id: Types.ObjectId; src: string }[];
 
   @Prop({
     default: false,

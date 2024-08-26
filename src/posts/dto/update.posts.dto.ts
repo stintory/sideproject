@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
-
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
+enum Authority {
+  friend = 'friend',
+  family = 'family',
+  none = 'none',
+}
 export class UpdatePostsDto {
   @ApiProperty({
     required: false,
@@ -20,5 +24,12 @@ export class UpdatePostsDto {
   @IsString()
   content?: string;
 
-  // TODO : image 수정
+  @ApiProperty({
+    example: '권한 설정',
+    description: 'freinds: {read: false}, family: {read: false}',
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  permission?: Authority;
 }

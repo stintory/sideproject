@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Model, Types, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { Post } from '../schema/posts.schema';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -14,6 +14,10 @@ export class PostsRepository {
 
   async findById(id: string | Types.ObjectId): Promise<Post> {
     return this.postModel.findById(id).exec();
+  }
+
+  async findByIdWithImage(query: FilterQuery<Post>): Promise<Post> {
+    return this.postModel.findById(query).populate('images', 'src');
   }
 
   async find(id: string): Promise<Post> {
