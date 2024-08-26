@@ -52,7 +52,7 @@ export class PostsController {
       required: ['title', 'content'],
     },
   })
-  @UseInterceptors(FilesInterceptor('image', 30, postMulterOptions))
+  @UseInterceptors(FilesInterceptor('files', 30, postMulterOptions))
   async create(
     @CurrentUser() user: User,
     @Body() body: CreatePostsDto,

@@ -81,4 +81,21 @@ export class AuthController {
   async refreshAccessToken(@CurrentUser() user: User) {
     return await this.authService.refreshAccessToken(user);
   }
+
+  @Post('checkPassword')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: '비밀번호 확인',
+    description: '개인정보 페이지 접근 시 비밀번호 확인.',
+  })
+  async checkMyPassword(@CurrentUser() user: User, @Body() body: { password: string }) {
+    const { password } = body;
+    const check = await this.authService.checkMyPassword(user, password);
+    console.log(check);
+    if (check === true) {
+      return { result: true };
+    } else {
+      return { result: false };
+    }
+  }
 }

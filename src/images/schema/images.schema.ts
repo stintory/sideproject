@@ -26,9 +26,7 @@ export class Image extends Document {
   @Prop()
   filename: string;
 
-  @Prop({
-    required: false,
-  })
+  @Prop()
   src: string;
 
   @Prop({

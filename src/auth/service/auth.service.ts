@@ -260,4 +260,10 @@ export class AuthService {
       message: 'successfully created new AccessToken',
     };
   }
+
+  async checkMyPassword(user: User, password: string) {
+    const isSamePassword = await this.comparePassword(password, user.toJSON().password);
+    console.log(isSamePassword);
+    return isSamePassword;
+  }
 }

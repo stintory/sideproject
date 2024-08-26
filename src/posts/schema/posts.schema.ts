@@ -1,5 +1,6 @@
 import { Document, SchemaOptions, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Image } from '../../images/schema/images.schema';
 
 const options: SchemaOptions = {
   versionKey: false,
@@ -48,7 +49,7 @@ export class Post extends Document {
   })
   content: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Image' }], required: false })
+  @Prop({ type: [{ type: Types.ObjectId, required: true, ref: 'Image' }] })
   images: Types.ObjectId[];
 
   @Prop()
