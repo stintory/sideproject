@@ -16,6 +16,9 @@ import { HttpModule } from '@nestjs/axios';
 import { PetsService } from '../pets/service/pets.service';
 import { PetsRepository } from '../pets/reppository/pets.repository';
 import { Pet, PetSchema } from '../pets/schema/pet.schema';
+import { ImagesService } from '../images/service/images.service';
+import { ImagesRepository } from '../images/repository/images.repository';
+import { Image, ImageSchema } from '../images/schema/images.schema';
 
 @Module({
   imports: [
@@ -23,6 +26,7 @@ import { Pet, PetSchema } from '../pets/schema/pet.schema';
       { name: User.name, schema: UserSchema },
       { name: Plan.name, schema: PlanSchema },
       { name: Pet.name, schema: PetSchema },
+      { name: Image.name, schema: ImageSchema },
     ]),
     TransactionsModule,
     HttpModule,
@@ -38,6 +42,8 @@ import { Pet, PetSchema } from '../pets/schema/pet.schema';
     AuthRepository,
     PortOneService,
     PlansRepository,
+    ImagesService,
+    ImagesRepository,
   ],
   exports: [UsersRepository],
 })

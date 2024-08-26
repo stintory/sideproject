@@ -30,11 +30,12 @@ export class UsersController {
   })
   async getUser(@CurrentUser() user: User) {
     const petsResult = await this.petsService.findAll(user);
+    console.log(petsResult);
     const pets = petsResult.result;
-    const petIds = await Promise.all(pets.map(async (pet) => pet.petInfo));
+    const petInfo = await Promise.all(pets.map(async (pet) => [pet._id, pet.name, pet.age, pet.image]));
     const userResult = {
       ...user.getMe,
-      petIds,
+      petInfo,
     };
     return { data: userResult };
   }

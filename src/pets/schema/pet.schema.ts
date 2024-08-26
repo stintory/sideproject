@@ -6,11 +6,6 @@ const options: SchemaOptions = {
   collection: 'pets',
 };
 
-enum Sex {
-  male = 'male',
-  female = 'female',
-}
-
 @Schema(options)
 export class Pet extends Document {
   @Prop({
@@ -32,9 +27,9 @@ export class Pet extends Document {
   age: number;
 
   @Prop({
-    enum: [Sex.male, Sex.female],
+    required: true,
   })
-  sex: Sex;
+  gender: string;
 
   @Prop()
   birth: string;
@@ -54,11 +49,11 @@ export class Pet extends Document {
 const _PetSchema = SchemaFactory.createForClass(Pet);
 _PetSchema.set('toObject', { virtuals: true });
 _PetSchema.set('toJSON', { virtuals: true });
-_PetSchema.virtual('petInfo').get(function (this: Pet) {
-  return {
-    id: this.id,
-    name: this.name,
-  };
-});
+// _PetSchema.virtual('petInfo').get(function (this: Pet) {
+//   return {
+//     id: this.id,
+//     name: this.name,
+//   };
+// });
 
 export const PetSchema = _PetSchema;

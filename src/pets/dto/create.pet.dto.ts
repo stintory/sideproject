@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 
-enum SexType {
-  male = 'male',
-  female = 'female',
-}
 export class CreatePetDto {
   @ApiProperty({
     required: true,
@@ -27,10 +23,8 @@ export class CreatePetDto {
     example: 'male',
     description: '성별',
   })
-  @IsEnum(SexType, {
-    message: '성별은 male, female 중 하나여야 합니다.',
-  })
-  sex: SexType;
+  @IsString()
+  gender: string;
 
   @ApiProperty({
     required: true,

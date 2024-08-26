@@ -81,6 +81,7 @@ export class Post extends Document {
     content: string;
     comments: Types.ObjectId[];
     likes: number;
+    growthReport: boolean;
     images: Types.ObjectId[];
     createdAt: string;
     updatedAt: string;
@@ -96,6 +97,7 @@ _PostSchema.virtual('getInfo').get(function (this: Post) {
     content: this.content,
     comments: this.comments,
     likes: this.likes,
+    growthReport: this.growthReport,
     images: this.images,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

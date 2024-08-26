@@ -18,7 +18,7 @@ export class PetsRepository {
   }
 
   async findAll(userId: string | Types.ObjectId): Promise<Pet[]> {
-    return await this.petModel.find({ userId }).exec();
+    return await this.petModel.find({ userId: userId }).exec();
   }
 
   async findById(id: string | Types.ObjectId): Promise<Pet> {

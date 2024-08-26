@@ -27,6 +27,7 @@ export class PostsService {
         title,
         content,
         userId,
+        growthReport: growthReportFlag,
       };
 
       const newPost = await this.postsRepository.create(newPostData);
@@ -34,12 +35,7 @@ export class PostsService {
       let imageIds: string[] = [];
 
       if (files && files.length > 0) {
-        const processedFiles = files.map((file) => {
-          file.filename = `${Date.now()}_${file.originalname}`;
-          return file;
-        });
-
-        imageIds = await Promise.all(processedFiles.map((file) => this.uploadImage(file, growthReportFlag, userId)));
+        imageIds = await Promise.all(files.map((file) => this.uploadImage(file, growthReportFlag, userId)));
       }
 
       if (imageIds.length > 0) {
@@ -56,11 +52,12 @@ export class PostsService {
   }
 
   async uploadImage(image: Express.Multer.File, growthReport: boolean, userId) {
-    const { filename, mimetype } = image;
+    const { filename, mimetype, path } = image;
 
     const uploadedImage = await this.imagesRepository.uploadImage({
       filename,
       type: mimetype,
+      src: path,
       growthReport,
       userId,
     });

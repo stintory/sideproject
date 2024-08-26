@@ -19,8 +19,8 @@ import { CurrentUser } from '../../@decorator/user.decorator';
 import { CreatePetDto } from '../dto/create.pet.dto';
 import { ValidateMongoIdPipe } from '../../@common/pipes/ValidateMongoIdPipe';
 import { UpdatePetDto } from '../dto/update.pet.dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { postMulterOptions } from '../../@utils/multer.util';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { petMulterOptions, postMulterOptions } from '../../@utils/multer.util';
 
 @Controller('pets')
 @UseGuards(JwtAuthGuard)
@@ -43,15 +43,16 @@ export class PetsController {
         },
         name: { type: 'string' },
         age: { type: 'number' },
-        sex: { type: 'string', enum: ['MALE', 'FEMALE'] },
+        gender: { type: 'string', enum: ['MALE', 'FEMALE'] },
         birth: { type: 'string', format: 'date' },
       },
     },
   })
-  @UseInterceptors(FilesInterceptor('image', 1, postMulterOptions))
+  @UseInterceptors(FileInterceptor('image', petMulterOptions))
   async create(@CurrentUser() user: User, @Body() body: CreatePetDto, @UploadedFile() file?: Express.Multer.File) {
+    console.log(file);
     const result = await this.petsService.create(user, body, file);
-    return result;
+    return { result };
   }
 
   @Get()

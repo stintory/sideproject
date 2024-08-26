@@ -29,7 +29,7 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor('image', 5, diaryMulterOptions))
+  @UseInterceptors(FilesInterceptor('files', 5, diaryMulterOptions))
   @ApiOperation({ summary: '다이어리 생성' })
   async createDiary(
     @CurrentUser() user: User,

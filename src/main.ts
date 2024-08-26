@@ -82,6 +82,7 @@ async function bootstrap() {
   });
 
   app.use(express.static(path.join(__dirname, '..', 'views')));
+  app.use('/_upload', express.static(path.join(__dirname, '../_upload')));
 
   const PORT = process.env.PORT;
   console.log(PORT);

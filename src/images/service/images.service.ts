@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ImagesRepository } from '../repository/images.repository';
 import { User } from '../../users/schema/user.schema';
 import { CreateImageDto } from '../dto/create.image.dto';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class ImagesService {
@@ -9,20 +11,13 @@ export class ImagesService {
 
   async create(user: User, body: CreateImageDto, files: Array<Express.Multer.File>) {
     const { name, growthReport } = body;
-    let processdFiles;
 
     if (!files || files.length === 0) {
       throw new Error('No image file provided');
-    } else {
-      processdFiles = files.map((file) => {
-        file.filename = `${Date.now()}_${file.originalname}`;
-        return file;
-      });
     }
-
-    const images = processdFiles.map((file) => ({
+    const images = files.map((file) => ({
       name,
-      filename: file.originalname,
+      filename: file.filename,
       growthReport: growthReport || false,
       src: file.path,
       type: file.mimetype,

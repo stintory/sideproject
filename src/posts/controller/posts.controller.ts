@@ -59,7 +59,7 @@ export class PostsController {
     @UploadedFiles() files?: Array<Express.Multer.File>,
   ) {
     const result = await this.postsService.create(user, body, files);
-    return result;
+    return { result };
   }
 
   @Get()

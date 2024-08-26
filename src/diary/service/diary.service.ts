@@ -14,11 +14,7 @@ export class DiaryService {
       const userId = user._id;
       let imageIds: string[] = [];
 
-      if (files) {
-        for (let i = 0, len = files.length; i < len; i++) {
-          const hash = v4().replace(/-/g, '').slice(0, 24);
-          files[i].filename = `${Date.now()}_${hash}_${files[i].originalname}`;
-        }
+      if (files && files.length > 0) {
         imageIds = await Promise.all(files.map((image) => this.uploadImage(image)));
       }
 
@@ -37,11 +33,12 @@ export class DiaryService {
   }
 
   async uploadImage(image: any) {
-    const { originalname, mimetype } = image;
+    const { originalname, filename, mimetype, path } = image;
     const name = originalname;
     const type = mimetype;
+    const src = path;
 
-    const uploadedImage = await this.imagesRepository.uploadImage({ name, type });
+    const uploadedImage = await this.imagesRepository.uploadImage({ filename, name, type, src });
     if (!uploadedImage) {
       throw new BadRequestException('이미지 업로드에 실패하였습니다.');
     }

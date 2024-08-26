@@ -32,7 +32,7 @@ export class ImagesController {
       },
     },
   })
-  @UseInterceptors(FilesInterceptor('images', 10, imageMulterOptions))
+  @UseInterceptors(FilesInterceptor('files', 10, imageMulterOptions))
   async createImage(
     @CurrentUser() user: User,
     @Body() body: CreateImageDto,
