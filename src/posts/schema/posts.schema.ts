@@ -50,8 +50,17 @@ export class Post extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }] })
   comments: Types.ObjectId[];
 
-  // @Prop({ type: [Types.ObjectId], ref: 'Comment', default: null })
-  // comments: Types.ObjectId[];
+  // @Prop({
+  //   type: [
+  //     {
+  //       _id: { type: Types.ObjectId, ref: 'Comment', required: true },
+  //       userId: { type: Types.ObjectId },
+  //       comment: { type: String },
+  //     },
+  //   ],
+  //   default: [],
+  // })
+  // comments: { _id: Types.ObjectId; userId: Types.ObjectId; comment: string }[];
 
   @Prop({
     enum: ['friend', 'family', 'none'],

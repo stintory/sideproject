@@ -124,6 +124,9 @@ export class AuthService {
   async login(email: string, password: string): Promise<any> {
     const user = await this.usersRepository.findOne({ email });
 
+    console.log(email);
+    console.log(password);
+
     if (!user) {
       throw new BadRequestException('User not found');
     }

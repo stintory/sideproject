@@ -20,6 +20,7 @@ export class PostsService {
   async create(user, body: CreatePostsDto, files: Express.Multer.File[]) {
     try {
       const { title, content, growthReport, authority } = body;
+      console.log(title, content, growthReport, authority);
       const userId = user._id;
       const growthReportFlag = growthReport ?? false;
       const newAuthority = authority ?? 'none';
@@ -89,7 +90,7 @@ export class PostsService {
 
   async getPost(postId: string) {
     try {
-      const findPost = await this.postsRepository.findById(postId);
+      const findPost = await this.postsRepository.findByIdComments(postId);
       if (!findPost) {
         throw new BadRequestException('존재하지 않는 게시글입니다.');
       }
@@ -100,7 +101,11 @@ export class PostsService {
         content: findPost.content,
         likes: findPost.likes,
         images: findPost.images,
-        comments: findPost.comments,
+        comments: findPost.comments.map((comment: any) => ({
+          _id: comment._id,
+          userId: comment.userId,
+          comment: comment.comment,
+        })),
         authority: findPost.authority,
         userId: findPost.userId,
         createdAt: findPost.createdAt,

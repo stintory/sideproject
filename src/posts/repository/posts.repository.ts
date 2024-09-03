@@ -16,6 +16,10 @@ export class PostsRepository {
     return this.postModel.findById(id).exec();
   }
 
+  async findByIdComments(id: string | Types.ObjectId): Promise<Post> {
+    return this.postModel.findById(id).populate({ path: 'comments', select: '_id userId comment' }).exec();
+  }
+
   async findByIdWithImage(query: FilterQuery<Post>): Promise<Post> {
     return this.postModel.findById(query).populate('images', 'src');
   }

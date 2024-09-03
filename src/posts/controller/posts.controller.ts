@@ -58,6 +58,7 @@ export class PostsController {
     @Body() body: CreatePostsDto,
     @UploadedFiles() files?: Array<Express.Multer.File>,
   ) {
+    console.log(body);
     const result = await this.postsService.create(user, body, files);
     return { result };
   }
