@@ -12,7 +12,8 @@ type Authority = 'friend' | 'family' | 'none';
 @Schema(options)
 export class Post extends Document {
   @Prop({
-    type: [{ type: Types.ObjectId, ref: 'Users' }],
+    type: Types.ObjectId,
+    ref: 'Users',
     default: null,
   })
   userId: Types.ObjectId;
