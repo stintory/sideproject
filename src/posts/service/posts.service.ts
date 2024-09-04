@@ -105,6 +105,7 @@ export class PostsService {
           _id: comment._id,
           userId: comment.userId,
           comment: comment.comment,
+          createdAt: comment.createdAt,
         })),
         authority: findPost.authority,
         userId: findPost.userId,

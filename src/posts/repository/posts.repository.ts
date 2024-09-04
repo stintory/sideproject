@@ -17,7 +17,7 @@ export class PostsRepository {
   }
 
   async findByIdComments(id: string | Types.ObjectId): Promise<Post> {
-    return this.postModel.findById(id).populate({ path: 'comments', select: '_id userId comment' }).exec();
+    return this.postModel.findById(id).populate({ path: 'comments', select: '_id userId comment createdAt' }).exec();
   }
 
   async findByIdWithImage(query: FilterQuery<Post>): Promise<Post> {
