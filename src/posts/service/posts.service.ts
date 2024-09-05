@@ -92,29 +92,6 @@ export class PostsService {
 
   async getPost(postId: string) {
     try {
-      // const findPost = await this.postsRepository.findByIdComments(postId);
-      // if (!findPost) {
-      //   throw new BadRequestException('존재하지 않는 게시글입니다.');
-      // }
-      //
-      // const result = {
-      //   id: findPost._id,
-      //   title: findPost.title,
-      //   content: findPost.content,
-      //   likes: findPost.likes,
-      //   images: findPost.images,
-      //   comments: findPost.comments.map((comment: any) => ({
-      //     _id: comment._id,
-      //     userId: comment.userId,
-      //     comment: comment.comment,
-      //     createdAt: comment.createdAt,
-      //   })),
-      //   authority: findPost.authority,
-      //   userId: findPost.userId,
-      //   createdAt: findPost.createdAt,
-      //   updatedAt: findPost.updatedAt,
-      // };
-
       const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
         throw new BadRequestException('Not exist Post');
