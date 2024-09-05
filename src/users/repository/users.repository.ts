@@ -7,6 +7,10 @@ import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 export class UsersRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
+  async findByIdInPost(query: FilterQuery<User>): Promise<User> {
+    return this.userModel.findById(query).exec();
+  }
+
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }

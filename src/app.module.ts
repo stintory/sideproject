@@ -17,6 +17,7 @@ import mongoose from 'mongoose';
 import { GlobalExceptionFilter } from './@common/exceptions/global-exception.filter';
 import { LoggerMiddleware } from './@common/middlewares/logger.middleware';
 import { PetsModule } from './pets/pets.module';
+import { HistoryModule } from './history/history.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PetsModule } from './pets/pets.module';
     ImagesModule,
     DiaryModule,
     PetsModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [

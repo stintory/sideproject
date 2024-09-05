@@ -8,12 +8,14 @@ import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { getPaginate } from '../../@utils/pagination.utils';
 import { CommentsRepository } from '../../comments/repository/comments.repository';
+import { UsersRepository } from '../../users/repository/users.repository';
 @Injectable()
 export class PostsService {
   constructor(
     private readonly postsRepository: PostsRepository,
     private readonly imagesRepository: ImagesRepository,
     private readonly commentsRepository: CommentsRepository,
+    private readonly usersRepository: UsersRepository,
     @InjectModel(Post.name) private readonly postModel: Model<Post>,
   ) {}
 
@@ -90,10 +92,56 @@ export class PostsService {
 
   async getPost(postId: string) {
     try {
-      const findPost = await this.postsRepository.findByIdComments(postId);
+      // const findPost = await this.postsRepository.findByIdComments(postId);
+      // if (!findPost) {
+      //   throw new BadRequestException('존재하지 않는 게시글입니다.');
+      // }
+      //
+      // const result = {
+      //   id: findPost._id,
+      //   title: findPost.title,
+      //   content: findPost.content,
+      //   likes: findPost.likes,
+      //   images: findPost.images,
+      //   comments: findPost.comments.map((comment: any) => ({
+      //     _id: comment._id,
+      //     userId: comment.userId,
+      //     comment: comment.comment,
+      //     createdAt: comment.createdAt,
+      //   })),
+      //   authority: findPost.authority,
+      //   userId: findPost.userId,
+      //   createdAt: findPost.createdAt,
+      //   updatedAt: findPost.updatedAt,
+      // };
+
+      const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
-        throw new BadRequestException('존재하지 않는 게시글입니다.');
+        throw new BadRequestException('Not exist Post');
       }
+      const commentsWithDetails = await Promise.all(
+        findPost.comments.map(async (commentId: Types.ObjectId) => {
+          // 댓글 정보 조회
+          const comment = await this.commentsRepository.findById(commentId);
+          if (comment) {
+            // 댓글의 userId로 유저 정보 조회
+            const user = await this.usersRepository.findByIdInPost(comment.userId);
+
+            // 유저 닉네임 추가
+            return {
+              _id: comment._id,
+              userId: comment.userId,
+              nickname: user?.nickname || 'Unknown', // 유저 닉네임이 없으면 'Unknown'으로 처리
+              comment: comment.comment,
+              createdAt: comment.createdAt,
+            };
+          } else {
+            return null; // 댓글이 없을 경우 null 처리
+          }
+        }),
+      );
+
+      const filteredComments = commentsWithDetails.filter((comment) => comment !== null);
 
       const result = {
         id: findPost._id,
@@ -101,12 +149,7 @@ export class PostsService {
         content: findPost.content,
         likes: findPost.likes,
         images: findPost.images,
-        comments: findPost.comments.map((comment: any) => ({
-          _id: comment._id,
-          userId: comment.userId,
-          comment: comment.comment,
-          createdAt: comment.createdAt,
-        })),
+        comments: filteredComments, // 조회한 댓글 리스트 (닉네임 포함)
         authority: findPost.authority,
         userId: findPost.userId,
         createdAt: findPost.createdAt,
