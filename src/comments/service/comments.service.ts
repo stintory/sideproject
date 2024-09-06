@@ -9,12 +9,14 @@ import { getPaginate } from '../../@utils/pagination.utils';
 import { CreateCommentDto } from '../dto/create.comment.dto';
 import { async } from 'rxjs';
 import { PostsRepository } from '../../posts/repository/posts.repository';
+import { LikesRepository } from '../../likes/repository/likes.repository';
 
 @Injectable()
 export class CommentsService {
   constructor(
     private readonly commentsRepository: CommentsRepository,
     private readonly postsRepository: PostsRepository,
+    private readonly likesRepository: LikesRepository,
     @InjectModel(Comment.name) private readonly commentModel: Model<Comment>,
   ) {}
 
@@ -91,6 +93,46 @@ export class CommentsService {
         throw new BadRequestException('Delete comment failed');
       }
       return { message: 'Delete comment successfully' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async toggleLike(userId: string, commentId: string) {
+    try {
+      const comment = await this.commentsRepository.findById(commentId);
+      if (!comment) {
+        throw new BadRequestException('Not exist Comment');
+      }
+
+      // 좋아요 여부 확인 (LikeSchema에서 조회)
+      const existingLike = await this.likesRepository.findOne({ userId, commentId });
+
+      if (existingLike) {
+        // 좋아요가 이미 존재 하면 좋아요 취소
+        await this.likesRepository.deleteOne({ userId, commentId });
+        comment.likes -= 1;
+      } else {
+        // 좋아요 추가
+        await this.likesRepository.create({ userId, commentId });
+        comment.likes += 1;
+      }
+
+      await comment.save();
+
+      return {
+        message: existingLike ? '좋아요 취소됨.' : '좋아요 추가됨.',
+        likes: comment.likes,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async totalLike(commentId: string) {
+    try {
+      const totalLikes = await this.likesRepository.count({ commentId });
+
+      return { likes: totalLikes };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -98,7 +98,15 @@ export class PostsController {
     return this.postsService.deletePost(postId);
   }
 
-  //TODO: 게시글 좋아요 및 좋아요
+  @Patch('/likes/:id')
+  @ApiOperation({ summary: '게시물 좋아요/취소' })
+  async toggleLike(@CurrentUser() user: User, @Param('id', ValidateMongoIdPipe) id: string) {
+    return this.postsService.toggleLike(user._id, id);
+  }
 
-  //TODO: 게시글 좋아요 취소.
+  @Get('/likes/:id')
+  @ApiOperation({ summary: '게시글 좋아요 총개수' })
+  async isLiked(@Param('id', ValidateMongoIdPipe) id: string) {
+    return this.postsService.totalLike(id);
+  }
 }

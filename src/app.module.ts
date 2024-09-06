@@ -19,6 +19,7 @@ import { LoggerMiddleware } from './@common/middlewares/logger.middleware';
 import { PetsModule } from './pets/pets.module';
 import { HistoryModule } from './history/history.module';
 import { RelationRequestModule } from './relationrequest/relationrequest.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RelationRequestModule } from './relationrequest/relationrequest.module'
     PetsModule,
     HistoryModule,
     RelationRequestModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [

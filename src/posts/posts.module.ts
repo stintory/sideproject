@@ -11,6 +11,8 @@ import { Comment, CommentSchema } from '../comments/schema/comments.schema';
 import { CommentsRepository } from '../comments/repository/comments.repository';
 import { UsersRepository } from '../users/repository/users.repository';
 import { User, UserSchema } from '../users/schema/user.schema';
+import { Like, LikeSchema } from '../likes/schema/likes.schema';
+import { LikesRepository } from '../likes/repository/likes.repository';
 
 @Module({
   imports: [
@@ -19,10 +21,19 @@ import { User, UserSchema } from '../users/schema/user.schema';
       { name: Image.name, schema: ImageSchema },
       { name: Comment.name, schema: CommentSchema },
       { name: User.name, schema: UserSchema },
+      { name: Like.name, schema: LikeSchema },
     ]),
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsRepository, ImagesRepository, CommentsService, CommentsRepository, UsersRepository],
+  providers: [
+    PostsService,
+    PostsRepository,
+    ImagesRepository,
+    CommentsService,
+    CommentsRepository,
+    UsersRepository,
+    LikesRepository,
+  ],
   exports: [PostsRepository],
 })
 export class PostsModule {}

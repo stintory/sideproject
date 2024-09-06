@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { getPaginate } from '../../@utils/pagination.utils';
 import { CommentsRepository } from '../../comments/repository/comments.repository';
 import { UsersRepository } from '../../users/repository/users.repository';
+import { LikesRepository } from '../../likes/repository/likes.repository';
 @Injectable()
 export class PostsService {
   constructor(
@@ -16,6 +17,7 @@ export class PostsService {
     private readonly imagesRepository: ImagesRepository,
     private readonly commentsRepository: CommentsRepository,
     private readonly usersRepository: UsersRepository,
+    private readonly likesRepository: LikesRepository,
     @InjectModel(Post.name) private readonly postModel: Model<Post>,
   ) {}
 
@@ -205,6 +207,47 @@ export class PostsService {
       // TODO: 해당 포스트를 삭제하면 관련된 이미지도 같이 삭제.
       await this.postsRepository.deleteById(postId);
       return { message: 'Post deleted' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async toggleLike(userId: string, postId: string) {
+    try {
+      const post = await this.postsRepository.findById(postId);
+      if (!post) {
+        throw new BadRequestException('Not exist Post');
+      }
+
+      // 좋아요 여부 확인 (LikeSchema에서 조회)
+      const existingLike = await this.likesRepository.findOne({ userId, postId });
+
+      if (existingLike) {
+        // 좋아요가 이미 존재 하면 좋아요 취소
+        await this.likesRepository.deleteOne({ userId, postId });
+        post.likes -= 1;
+      } else {
+        // 좋아요 추가
+        await this.likesRepository.create({ userId, postId });
+        post.likes += 1;
+      }
+
+      await post.save();
+
+      return {
+        message: existingLike ? '좋아요 취소됨.' : '좋아요 추가됨.',
+        likes: post.likes,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async totalLike(postId: string) {
+    try {
+      const totalLikes = await this.likesRepository.count({ postId });
+
+      return { likes: totalLikes };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

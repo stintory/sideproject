@@ -27,6 +27,10 @@ export class Comment extends Document {
   })
   postId: Types.ObjectId;
 
+  @Prop({
+    default: 0,
+  })
+  likes: number;
   @Prop({ default: Date.now })
   createdAt: Date;
 

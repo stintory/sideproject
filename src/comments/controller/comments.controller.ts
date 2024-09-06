@@ -46,4 +46,16 @@ export class CommentsController {
   async deleteComment(@Param('id', ValidateMongoIdPipe) commentId: string) {
     return this.commentsService.deleteComment(commentId);
   }
+
+  @Patch('/likes/:id')
+  @ApiOperation({ summary: '댓글 좋아요' })
+  async toggleLike(@CurrentUser() user: User, @Param('id', ValidateMongoIdPipe) id: string) {
+    return this.commentsService.toggleLike(user._id, id);
+  }
+
+  @Get('/likes/:id')
+  @ApiOperation({ summary: '댓글 좋아요 총개수' })
+  async isLiked(@Param('id', ValidateMongoIdPipe) id: string) {
+    return this.commentsService.totalLike(id);
+  }
 }
