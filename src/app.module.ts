@@ -18,6 +18,7 @@ import { GlobalExceptionFilter } from './@common/exceptions/global-exception.fil
 import { LoggerMiddleware } from './@common/middlewares/logger.middleware';
 import { PetsModule } from './pets/pets.module';
 import { HistoryModule } from './history/history.module';
+import { RelationRequestModule } from './relationrequest/relationrequest.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { HistoryModule } from './history/history.module';
     DiaryModule,
     PetsModule,
     HistoryModule,
+    RelationRequestModule,
   ],
   controllers: [AppController],
   providers: [

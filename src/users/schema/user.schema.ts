@@ -11,16 +11,15 @@ enum Role {
   user = 'user',
 }
 
-type MembersType = {
-  user: MemberUserType;
-};
+// type MembersType = {
+//   user: MemberUserType;
+// };
 
 type MemberUserType = {
-  userId: string;
+  userId: Types.ObjectId;
+  email: string;
   role: string;
 };
-
-type Authority = 'friend' | 'family' | 'none';
 
 type SubscriptionType = {
   lastPayment: Date;
@@ -48,7 +47,6 @@ export class User extends Document {
 
   @Prop({
     required: true,
-    index: true,
     unique: true,
   })
   nickname: string;
@@ -79,7 +77,7 @@ export class User extends Document {
   role: Role;
 
   @Prop({ default: null })
-  members: MembersType[];
+  members: MemberUserType[];
 
   @Prop({
     default: null,
@@ -90,12 +88,6 @@ export class User extends Document {
     default: false,
   })
   phoneVerified: boolean;
-
-  @Prop({
-    enum: ['friend', 'family', 'none'],
-    default: 'none',
-  })
-  authority: Authority;
 
   @Prop({
     type: Types.ObjectId,

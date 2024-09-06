@@ -114,7 +114,6 @@ export class AuthService {
       phoneVerified: user.phoneVerified,
       // planId: user.planId,
       role: user.role,
-      authority: user.authority,
       access_token: token,
       refresh_token: refreshToken,
       expires_in: expires_in,

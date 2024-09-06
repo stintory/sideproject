@@ -19,6 +19,8 @@ import { Pet, PetSchema } from '../pets/schema/pet.schema';
 import { ImagesService } from '../images/service/images.service';
 import { ImagesRepository } from '../images/repository/images.repository';
 import { Image, ImageSchema } from '../images/schema/images.schema';
+import { RelationRequest, RelationRequestSchema } from '../relationrequest/schema/relation.request.schema';
+import { RelationRequestRepository } from '../relationrequest/repository/relation.request.repository';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { Image, ImageSchema } from '../images/schema/images.schema';
       { name: Plan.name, schema: PlanSchema },
       { name: Pet.name, schema: PetSchema },
       { name: Image.name, schema: ImageSchema },
+      { name: RelationRequest.name, schema: RelationRequestSchema },
     ]),
     TransactionsModule,
     HttpModule,
@@ -44,6 +47,7 @@ import { Image, ImageSchema } from '../images/schema/images.schema';
     PlansRepository,
     ImagesService,
     ImagesRepository,
+    RelationRequestRepository,
   ],
   exports: [UsersRepository],
 })

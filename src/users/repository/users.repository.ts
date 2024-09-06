@@ -14,6 +14,9 @@ export class UsersRepository {
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }
+  async findByIdRelation(id: string | Types.ObjectId): Promise<User> {
+    return this.userModel.findById(id).select('members').exec();
+  }
 
   async create(user: Partial<User>): Promise<User> {
     const newUser = new this.userModel(user);
@@ -53,5 +56,9 @@ export class UsersRepository {
     //   $and: [{ _id: id }, { refreshToken: token }],
     // });
     return this.userModel.findOne({ _id: userId, refreshToken: token }).exec();
+  }
+
+  async findByIdAndUpdate(id: string | Types.ObjectId, updateObject: UpdateQuery<User>): Promise<User | null> {
+    return await this.userModel.findByIdAndUpdate(id, updateObject, { new: true }).exec();
   }
 }

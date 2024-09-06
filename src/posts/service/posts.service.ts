@@ -4,7 +4,7 @@ import { CreatePostsDto } from '../dto/create.posts.dto';
 import { ImagesRepository } from '../../images/repository/images.repository';
 import { PaginationOptions, PaginationResult } from '../../@interface/pagination.interface';
 import { Post } from '../schema/posts.schema';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { getPaginate } from '../../@utils/pagination.utils';
 import { CommentsRepository } from '../../comments/repository/comments.repository';
@@ -73,10 +73,49 @@ export class PostsService {
     return { _id: uploadedImage._id, src: uploadedImage.src };
   }
 
-  async findAll(user, paginationOptions: PaginationOptions): Promise<PaginationResult<Post>> {
+  async findAll(user, paginationOptions: PaginationOptions, authority: string): Promise<PaginationResult<Post>> {
     const userId = new Types.ObjectId(user._id);
-    const condition = { userId };
+    let condition: FilterQuery<Post>;
 
+    console.log(user._id);
+    // 사용자의 관계를 데이터베이스에서 조회합니다.
+    const userRelations = await this.usersRepository.findByIdRelation(user._id);
+    // console.log(userRelations);
+
+    // 사용자와 관계가 있는 유저들의 ID를 배열로 추출합니다.
+    const userRelationIds = userRelations.members.map((member) => member.userId);
+    console.log(userRelationIds);
+
+    if (authority === 'none') {
+      // 'none' 권한의 게시글을 가져옵니다.
+      condition = {
+        $or: [
+          { userId }, // 사용자가 작성한 게시글
+          { authority: 'none', userId: { $ne: userId } }, // 다른 사용자가 작성한 'none' 권한의 게시글
+        ],
+      };
+    } else if (authority === 'friend') {
+      // 'friend' 권한의 게시글을 가져옵니다.
+      condition = {
+        $or: [
+          { userId: { $in: userRelationIds }, authority: 'friend' }, // 친구인 유저가 작성한 게시글
+          { userId, authority: 'friend' }, // 사용자가 작성한 'friend' 권한의 게시글
+        ],
+      };
+    } else if (authority === 'family') {
+      // 'family' 권한의 게시글을 가져옵니다.
+      condition = {
+        $or: [
+          { userId: { $in: userRelationIds }, authority: 'family' }, // 가족인 유저가 작성한 게시글
+          { userId, authority: 'family' }, // 사용자가 작성한 'family' 권한의 게시글
+        ],
+      };
+    } else {
+      // 기본적으로 사용자가 작성한 게시글만 가져옵니다.
+      condition = { userId };
+    }
+
+    // 필터 조건에 맞는 게시글을 페이징 처리하여 조회합니다.
     const { data, totalResults } = await getPaginate<Post>(this.postModel, condition, paginationOptions, {});
     const result: any = await Promise.all(data.map(async (post) => post.getInfo));
 

@@ -10,6 +10,8 @@ import { SubscriptionsService } from '../service/subscriptions.service';
 import { UpdateSubscriptionDto } from '../dto/update.subscription.dto';
 import { CreateSubscriptionDto } from '../dto/create.subscription.dto';
 import { PetsService } from '../../pets/service/pets.service';
+import { CreateDto } from '../../relationrequest/dto/create.dto';
+import { ResponseRelationDto } from '../../relationrequest/dto/response.relation.dto';
 
 @Controller('users')
 @ApiBearerAuth('JWT-auth')
@@ -47,6 +49,37 @@ export class UsersController {
   })
   async updateUser(@Param('id', ValidateMongoIdPipe) userId: string, @Body() body?: UpdateUserDto) {
     return await this.usersService.updateUser(userId, body);
+  }
+
+  @Post('/relation')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '사용자 - 사용자 관계',
+    description: '사용자 - 사용자 관계를 추가 및 삭제.',
+  })
+  async relationship(@CurrentUser() user: User, @Body() body: CreateDto) {
+    console.log('1');
+    return await this.usersService.createRelation(user, body);
+  }
+
+  @Post('/relation/response')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '사용자 - 사용자 관계 수락 또는 거절',
+    description: '사용자 - 사용자 관계 수락 또는 거절.',
+  })
+  async relationResponse(@CurrentUser() user: User, @Body() body: ResponseRelationDto) {
+    return await this.usersService.relationResponse(user, body);
+  }
+
+  @Delete('/relation')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '사용자 - 사용자 관계 모두 삭제',
+    description: '사용자 - 사용자 관계 모두 삭제.',
+  })
+  async deleteRelations(@CurrentUser() user: User, @Body() body: CreateDto) {
+    return await this.usersService.deleteRelation(user, body);
   }
 
   @Delete(':id')

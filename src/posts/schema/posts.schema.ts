@@ -77,6 +77,7 @@ export class Post extends Document {
 
   readonly getInfo: {
     _id: Types.ObjectId;
+    userId: Types.ObjectId;
     title: string;
     content: string;
     comments: Types.ObjectId[];
@@ -94,6 +95,7 @@ const _PostSchema = SchemaFactory.createForClass(Post);
 _PostSchema.virtual('getInfo').get(function (this: Post) {
   return {
     id: this._id,
+    userId: this.userId,
     title: this.title,
     content: this.content,
     comments: this.comments,

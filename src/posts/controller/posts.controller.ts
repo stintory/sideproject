@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -63,10 +64,20 @@ export class PostsController {
     return { result };
   }
 
+  // @Get()
+  // @ApiOperation({ summary: '게시글 전체 조회' })
+  // async getAllPosts(@CurrentUser() user: User, @PaginationDecorator() pagination: PaginationOptions) {
+  //   return this.postsService.findAll(user, pagination);
+  // }
+
   @Get()
   @ApiOperation({ summary: '게시글 전체 조회' })
-  async getAllPosts(@CurrentUser() user: User, @PaginationDecorator() pagination: PaginationOptions) {
-    return this.postsService.findAll(user, pagination);
+  async getAllPosts(
+    @CurrentUser() user: User,
+    @PaginationDecorator() pagination: PaginationOptions,
+    @Query('authority') authority?: string,
+  ) {
+    return this.postsService.findAll(user, pagination, authority);
   }
 
   @Get(':id')
@@ -76,7 +87,7 @@ export class PostsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: '게시글 수정' })
+  @ApiOperation({ summary: ' 게시글 수정' })
   async updatePost(@Param('id', ValidateMongoIdPipe) postId: string, @Body() body: UpdatePostsDto) {
     return this.postsService.updatePost(postId, body);
   }
