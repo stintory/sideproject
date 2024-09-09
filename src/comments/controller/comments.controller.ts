@@ -31,8 +31,8 @@ export class CommentsController {
 
   @Get(':id')
   @ApiOperation({ summary: '댓글 단건 조회' })
-  async getComment(@Param('id', ValidateMongoIdPipe) commentId: string) {
-    return this.commentsService.getComment(commentId);
+  async getComment(@CurrentUser() user: User, @Param('id', ValidateMongoIdPipe) commentId: string) {
+    return this.commentsService.getComment(user, commentId);
   }
 
   @Patch(':id')

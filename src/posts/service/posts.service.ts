@@ -131,12 +131,14 @@ export class PostsService {
     };
   }
 
-  async getPost(postId: string) {
+  async getPost(user: User, postId: string) {
     try {
+      const userId = new Types.ObjectId(user._id);
       const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
         throw new BadRequestException('Not exist Post');
       }
+      const findLike = await this.likesRepository.findOne({ userId, postId });
       const commentsWithDetails = await Promise.all(
         findPost.comments.map(async (commentId: Types.ObjectId) => {
           // 댓글 정보 조회
@@ -170,6 +172,7 @@ export class PostsService {
         comments: filteredComments, // 조회한 댓글 리스트 (닉네임 포함)
         authority: findPost.authority,
         userId: findPost.userId,
+        liked: !!findLike,
         createdAt: findPost.createdAt,
         updatedAt: findPost.updatedAt,
       };

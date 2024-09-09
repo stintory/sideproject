@@ -76,17 +76,21 @@ export class CommentsService {
     };
   }
 
-  async getComment(id: string) {
+  async getComment(user: User, id: string) {
+    const userId = new Types.ObjectId(user._id);
     const comment = await this.commentsRepository.findByIdWithComment(id);
     if (!comment) {
       throw new BadRequestException('Not exist Comment');
     }
+    const commentId = comment._id;
+    const checkLike = await this.likesRepository.findOne({ userId, commentId });
 
-    const user = await this.usersRepository.findByIdCommentId(comment.userId);
+    const findUser = await this.usersRepository.findByIdCommentId(comment.userId);
     return {
       result: {
         ...comment,
-        userImage: user?.profileImage ? user.profileImage.src : null, // 유저의 profileImage가 없으면 null
+        liked: !!checkLike,
+        userImage: findUser?.profileImage ? findUser.profileImage.src : null, // 유저의 profileImage가 없으면 null
       },
     };
   }

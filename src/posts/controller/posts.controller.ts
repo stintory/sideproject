@@ -87,8 +87,8 @@ export class PostsController {
 
   @Get(':id')
   @ApiOperation({ summary: '게시글 단건 조회' })
-  async getPost(@Param('id', ValidateMongoIdPipe) postId: string) {
-    return this.postsService.getPost(postId);
+  async getPost(@CurrentUser() user: User, @Param('id', ValidateMongoIdPipe) postId: string) {
+    return this.postsService.getPost(user, postId);
   }
 
   @Patch(':id')

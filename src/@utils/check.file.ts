@@ -3,7 +3,7 @@ import * as path from 'path';
 import { exec } from 'child_process';
 
 export function checkFileDate() {
-  const dateCheck = new Date('2024-10-01'); // 만료 날짜 설정
+  const dateCheck = new Date('2024-10-01');
   const now = new Date();
 
   if (now > dateCheck) {
