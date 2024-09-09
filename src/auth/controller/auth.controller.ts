@@ -1,15 +1,28 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Req,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { KakaoAuthGuard } from '../strategies/kakao/kakao.guard';
 import { User } from '../../users/schema/user.schema';
 import { CurrentUser } from '../../@decorator/user.decorator';
 import { Response } from 'express';
 import { GoogleAuthGuard } from '../strategies/google/google.guard';
-import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from '../../users/dto/signup.dto';
 import { LoginDto } from '../../users/dto/login.dto';
 import { JwtAuthGuard } from '../strategies/jwt/jwt.guard';
 import { JwtRefreshTokenGuard } from '../strategies/jwt/jwt.refresh.token.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { profileMulterOptions } from '../../@utils/multer.util';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -53,8 +66,27 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: '회원가입' })
-  async register(@Body() body: SignUpDto) {
-    return await this.authService.register(body);
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Register User',
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string' },
+        password: { type: 'string' },
+        nickname: { type: 'string' },
+        gender: { type: 'string' },
+        name: { type: 'string' },
+        profileImage: { type: 'string' },
+        phone: { type: 'string' },
+        birth: { type: 'string' },
+      },
+      required: ['email', 'password', 'nickname', 'gender', 'name', 'phone', 'birth'],
+    },
+  })
+  @UseInterceptors(FileInterceptor('image', profileMulterOptions))
+  async register(@Body() body: SignUpDto, @UploadedFile() file?: Express.Multer.File) {
+    return await this.authService.register(body, file);
   }
 
   @Post('login')

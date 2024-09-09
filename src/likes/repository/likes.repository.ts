@@ -21,4 +21,8 @@ export class LikesRepository {
   async count(query: FilterQuery<Like>): Promise<number> {
     return await this.likeModel.countDocuments(query).exec();
   }
+
+  async find(query: FilterQuery<Like>): Promise<Like[]> {
+    return await this.likeModel.find(query).exec();
+  }
 }

@@ -1,6 +1,18 @@
-import { Controller, HttpCode, Get, Patch, Param, Body, UseGuards, Delete, Post } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  Get,
+  Patch,
+  Param,
+  Body,
+  UseGuards,
+  Delete,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { UsersService } from '../service/users.service';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/@decorator/user.decorator';
 import { User } from '../schema/user.schema';
 import { ValidateMongoIdPipe } from 'src/@common/pipes/ValidateMongoIdPipe';
@@ -12,6 +24,8 @@ import { CreateSubscriptionDto } from '../dto/create.subscription.dto';
 import { PetsService } from '../../pets/service/pets.service';
 import { CreateDto } from '../../relationrequest/dto/create.dto';
 import { ResponseRelationDto } from '../../relationrequest/dto/response.relation.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { profileMulterOptions } from '../../@utils/multer.util';
 
 @Controller('users')
 @ApiBearerAuth('JWT-auth')
@@ -47,8 +61,31 @@ export class UsersController {
     summary: '사용자 정보 수정',
     description: '사용자 정보를 수정합니다.',
   })
-  async updateUser(@Param('id', ValidateMongoIdPipe) userId: string, @Body() body?: UpdateUserDto) {
-    return await this.usersService.updateUser(userId, body);
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'user update',
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string' },
+        password: { type: 'string' },
+        nickname: { type: 'string' },
+        gender: { type: 'string' },
+        name: { type: 'string' },
+        profileImage: { type: 'string' },
+        birth: { type: 'string' },
+        phone: { type: 'string' },
+        phoneVerified: { type: 'boolean' },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('image', profileMulterOptions))
+  async updateUser(
+    @Param('id', ValidateMongoIdPipe) userId: string,
+    @Body() body?: UpdateUserDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return await this.usersService.updateUser(userId, body, file);
   }
 
   @Post('/relation')
@@ -58,7 +95,6 @@ export class UsersController {
     description: '사용자 - 사용자 관계를 추가 및 삭제.',
   })
   async relationship(@CurrentUser() user: User, @Body() body: CreateDto) {
-    console.log('1');
     return await this.usersService.createRelation(user, body);
   }
 

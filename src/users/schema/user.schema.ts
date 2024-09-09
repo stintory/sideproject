@@ -29,6 +29,13 @@ type SubscriptionType = {
   merchantUid?: string;
   enabled?: boolean;
 };
+class ProfileImage {
+  @Prop({ type: Types.ObjectId, ref: 'Image', required: false })
+  _id: Types.ObjectId;
+
+  @Prop({ type: String, required: false })
+  src: string;
+}
 
 @Schema(options)
 export class User extends Document {
@@ -55,6 +62,12 @@ export class User extends Document {
     required: true,
   })
   name: string;
+
+  @Prop({
+    type: ProfileImage,
+    required: false,
+  })
+  profileImage: ProfileImage;
 
   @Prop({
     required: true,
@@ -145,6 +158,7 @@ export class User extends Document {
     name: string;
     birth: string;
     phone: string;
+    profileImage: ProfileImage;
     phoneVerified: boolean;
   };
 
@@ -187,6 +201,7 @@ _UserSchema.virtual('updateUser').get(function (this: User) {
     nickname: this.nickname,
     gender: this.gender,
     name: this.name,
+    profileImage: this.profileImage,
     birth: this.birth,
     phone: this.phone,
     phoneVerified: this.phoneVerified,

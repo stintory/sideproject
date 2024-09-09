@@ -24,6 +24,10 @@ export class PostsRepository {
     return this.postModel.findById(query).populate('images', 'src');
   }
 
+  async findByIdWithBookmark(userId: string | Types.ObjectId, isBookmark: boolean): Promise<Post[]> {
+    return this.postModel.find({ userId, isBookmark }).exec();
+  }
+
   async find(id: string): Promise<Post> {
     return this.postModel.findById(id).populate('comments').populate('images').exec();
   }

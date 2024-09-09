@@ -8,10 +8,15 @@ import { RegisterDto } from '../dto/register.user.dto';
 import * as bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { SignUpDto } from '../../users/dto/signup.dto';
+import { ImagesRepository } from '../../images/repository/images.repository';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersRepository: UsersRepository, private readonly authRepository: AuthRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly authRepository: AuthRepository,
+    private readonly imagesRepository: ImagesRepository,
+  ) {}
 
   async registerSns(body: RegisterDto) {
     const { email, nickname, provider, snsId } = body;
@@ -35,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async register(body: SignUpDto) {
+  async register(body: SignUpDto, file?: Express.Multer.File) {
     const { email, password, nickname, gender, name, phone, birth } = body;
     const existingUser = await this.usersRepository.findOne({ email });
     if (existingUser) {
@@ -59,19 +64,44 @@ export class AuthService {
       birth,
     });
 
+    let profileImage;
+    if (file) {
+      profileImage = await this.uploadProfileImage(file, newUser._id);
+    }
+
+    const result = await this.usersRepository.findByIdAndUpdate(newUser._id, { profileImage: profileImage });
+
     // const token = await this.generateToken(newUser);
     // const refreshToken = await this.generateRefreshToken(newUser);
     // const expires_in = await this.getExpToken(token);
 
     return {
-      email: newUser.email,
-      nickname: newUser.nickname,
-      gender,
-      name,
-      phone,
-      birth,
+      email: result.email,
+      nickname: result.nickname,
+      gender: result.gender,
+      name: result.name,
+      profileImage: result.profileImage,
+      phone: result.phone,
+      birth: result.birth,
       message: 'Successfully registered',
     };
+  }
+
+  private async uploadProfileImage(file: Express.Multer.File, userId) {
+    const { filename, mimetype, path } = file;
+    const growthReport = false;
+    const uploadedProfileImage = await this.imagesRepository.uploadImage({
+      filename,
+      type: mimetype,
+      src: path,
+      growthReport,
+      userId,
+    });
+    if (!uploadedProfileImage) {
+      throw new BadRequestException('Failed to upload profile image');
+    }
+
+    return { _id: uploadedProfileImage._id, src: uploadedProfileImage.src };
   }
 
   private async makePasswordHash(password: string): Promise<string> {

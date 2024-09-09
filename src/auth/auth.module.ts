@@ -12,11 +12,16 @@ import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
 import { GoogleStrategy } from './strategies/google/google.strategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwt/jwt.refreshToken.strategy';
+import { ImagesRepository } from '../images/repository/images.repository';
+import { Image, ImageSchema } from '../images/schema/images.schema';
 
 @Module({
   imports: [
     PassportModule.register({}),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Image.name, schema: ImageSchema },
+    ]),
     HttpModule,
     UsersModule,
   ],
@@ -29,6 +34,7 @@ import { JwtRefreshTokenStrategy } from './strategies/jwt/jwt.refreshToken.strat
     UsersRepository,
     JwtStrategy,
     JwtRefreshTokenStrategy,
+    ImagesRepository,
   ],
   exports: [AuthRepository, AuthService, KakaoStrategy, GoogleStrategy, JwtRefreshTokenStrategy, JwtStrategy],
 })

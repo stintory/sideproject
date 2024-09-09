@@ -79,6 +79,11 @@ export class PostsController {
   ) {
     return this.postsService.findAll(user, pagination, authority);
   }
+  @Get('/bookmark')
+  @ApiOperation({ summary: '게시글 북마크 목록 조회' })
+  async getBookmarkList(@CurrentUser() user: User) {
+    return this.postsService.getBookmarkList(user);
+  }
 
   @Get(':id')
   @ApiOperation({ summary: '게시글 단건 조회' })

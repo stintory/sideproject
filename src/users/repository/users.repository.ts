@@ -11,8 +11,12 @@ export class UsersRepository {
     return this.userModel.findById(query).exec();
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string | Types.ObjectId): Promise<User> {
     return this.userModel.findById(id).exec();
+  }
+
+  async findByIdCommentId(id: string | Types.ObjectId): Promise<User> {
+    return this.userModel.findById(id).select('profileImage').exec();
   }
   async findByIdRelation(id: string | Types.ObjectId): Promise<User> {
     return this.userModel.findById(id).select('members').exec();

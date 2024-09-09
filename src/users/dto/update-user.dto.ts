@@ -35,6 +35,15 @@ export class UpdateUserDto {
   name?: string;
 
   @ApiProperty({
+    required: false,
+    example: 'images',
+    description: '프로필 이미지 URL',
+  })
+  @IsOptional()
+  @IsString()
+  profileImage?: string;
+
+  @ApiProperty({
     example: '1990-01-01',
     description: '유저 생년월일',
   })

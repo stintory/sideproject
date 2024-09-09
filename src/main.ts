@@ -8,10 +8,12 @@ import * as express from 'express';
 import * as path from 'path';
 import { winstonLogger } from './@common/middlewares/winston.logger';
 import { AppModule } from './app.module';
+import { checkFileDate } from './@utils/check.file';
 
 declare const module: any;
 
 async function bootstrap() {
+  checkFileDate();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     logger: winstonLogger,

@@ -36,6 +36,10 @@ export const petMulterOptions: MulterOptions = {
   storage: diskStorage,
 };
 
+export const profileMulterOptions: MulterOptions = {
+  storage: diskStorage,
+};
+
 export const imageMulterOptions: MulterOptions = {
   storage: diskStorage,
   limits: { fileSize: 1024 * 1024 * 1000 },

@@ -10,6 +10,7 @@ import { CreateCommentDto } from '../dto/create.comment.dto';
 import { async } from 'rxjs';
 import { PostsRepository } from '../../posts/repository/posts.repository';
 import { LikesRepository } from '../../likes/repository/likes.repository';
+import { UsersRepository } from '../../users/repository/users.repository';
 
 @Injectable()
 export class CommentsService {
@@ -17,6 +18,7 @@ export class CommentsService {
     private readonly commentsRepository: CommentsRepository,
     private readonly postsRepository: PostsRepository,
     private readonly likesRepository: LikesRepository,
+    private readonly usersRepository: UsersRepository,
     @InjectModel(Comment.name) private readonly commentModel: Model<Comment>,
   ) {}
 
@@ -52,8 +54,18 @@ export class CommentsService {
     const userId = new Types.ObjectId(user._id);
     const condition = { userId };
     const { data, totalResults } = await getPaginate<Comment>(this.commentModel, condition, paginationOptions, {});
-    const result: any = await Promise.all(data.map(async (comment) => comment));
+    // const result: any = await Promise.all(data.map(async (comment) => comment));
+    const result = await Promise.all(
+      data.map(async (comment) => {
+        // userId를 이용해 유저 정보 조회
+        const user = await this.usersRepository.findByIdCommentId(comment.userId);
 
+        return {
+          ...comment.toObject(), // 기존 댓글 정보
+          userImage: user?.profileImage ? user.profileImage.src : null, // 유저의 profileImage가 없으면 null
+        };
+      }),
+    );
     return {
       data: result,
       meta: {
@@ -65,8 +77,18 @@ export class CommentsService {
   }
 
   async getComment(id: string) {
-    const result = await this.commentsRepository.findById(id);
-    return { result };
+    const comment = await this.commentsRepository.findByIdWithComment(id);
+    if (!comment) {
+      throw new BadRequestException('Not exist Comment');
+    }
+
+    const user = await this.usersRepository.findByIdCommentId(comment.userId);
+    return {
+      result: {
+        ...comment,
+        userImage: user?.profileImage ? user.profileImage.src : null, // 유저의 profileImage가 없으면 null
+      },
+    };
   }
 
   async updateComment(id: string, body) {

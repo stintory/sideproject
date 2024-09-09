@@ -36,10 +36,19 @@ export class Comment extends Document {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  profileImage: string;
 }
 
 const _CommentSchema = SchemaFactory.createForClass(Comment);
 _CommentSchema.set('toObject', { virtuals: true });
 _CommentSchema.set('toJSON', { virtuals: true });
+
+_CommentSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userId',
+  foreignField: '_id',
+  justOne: true,
+});
 
 export const CommentSchema = _CommentSchema;

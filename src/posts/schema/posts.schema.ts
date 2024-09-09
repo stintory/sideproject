@@ -59,6 +59,11 @@ export class Post extends Document {
   })
   authority: Authority;
 
+  @Prop({
+    default: false,
+  })
+  isBookmark: boolean;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 

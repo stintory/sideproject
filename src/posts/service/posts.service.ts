@@ -10,6 +10,7 @@ import { getPaginate } from '../../@utils/pagination.utils';
 import { CommentsRepository } from '../../comments/repository/comments.repository';
 import { UsersRepository } from '../../users/repository/users.repository';
 import { LikesRepository } from '../../likes/repository/likes.repository';
+import { User } from '../../users/schema/user.schema';
 @Injectable()
 export class PostsService {
   constructor(
@@ -116,7 +117,6 @@ export class PostsService {
       // 기본적으로 사용자가 작성한 게시글만 가져옵니다.
       condition = { userId };
     }
-
     // 필터 조건에 맞는 게시글을 페이징 처리하여 조회합니다.
     const { data, totalResults } = await getPaginate<Post>(this.postModel, condition, paginationOptions, {});
     const result: any = await Promise.all(data.map(async (post) => post.getInfo));
@@ -180,16 +180,34 @@ export class PostsService {
     }
   }
 
+  async getBookmarkList(user: User) {
+    const userId = new Types.ObjectId(user._id);
+    console.log(userId);
+    const isBookmark = true;
+    const result = await this.postsRepository.findByIdWithBookmark(userId, isBookmark);
+
+    if (result.length === 0) {
+      return { message: 'none' };
+    }
+    return { result };
+  }
+
   async updatePost(postId: string, body) {
     try {
-      const { title, content, authority } = body;
+      const { title, content, authority, isBookmark } = body;
       const findPost = await this.postsRepository.findById(postId);
       if (!findPost) {
         throw new BadRequestException('Not exist Post');
       }
       const updatedAt = new Date(Date.now());
 
-      const updatePost = await this.postsRepository.findByIdAndUpdate(postId, { title, content, authority, updatedAt });
+      const updatePost = await this.postsRepository.findByIdAndUpdate(postId, {
+        title,
+        content,
+        authority,
+        isBookmark,
+        updatedAt,
+      });
 
       return {
         result: {

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RelationRequest } from '../schema/relation.request.schema';
-import { Model } from 'mongoose';
-import { CreateRelationRequestDto } from '../dto/create.relation.request.dto';
+import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
 export class RelationRequestRepository {
@@ -31,5 +30,9 @@ export class RelationRequestRepository {
 
   async deleteMany(conditon: any): Promise<any> {
     return await this.relationRequestModel.deleteMany(conditon).exec();
+  }
+
+  async find(query: FilterQuery<RelationRequest>): Promise<RelationRequest[]> {
+    return await this.relationRequestModel.find(query).exec();
   }
 }

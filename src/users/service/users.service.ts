@@ -7,20 +7,33 @@ import { ResponseRelationDto } from '../../relationrequest/dto/response.relation
 import { RelationRequestRepository } from '../../relationrequest/repository/relation.request.repository';
 import { Types } from 'mongoose';
 import { CreateRelationRequestDto } from '../../relationrequest/dto/create.relation.request.dto';
+import { ImagesRepository } from '../../images/repository/images.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly relationRequestRepository: RelationRequestRepository,
+    private readonly imagesRepository: ImagesRepository,
   ) {}
 
   async getUser(userId: string): Promise<User> {
     return this.usersRepository.findById(userId);
   }
 
-  async updateUser(userId: string, updateUser: UpdateUserDto) {
-    const result = await this.usersRepository.update(userId, updateUser);
+  async updateUser(userId: string, updateUser: UpdateUserDto, file: Express.Multer.File) {
+    let profileImage;
+
+    if (file) {
+      profileImage = await this.uploadProfileImage(file, userId);
+    }
+
+    const updatedData = {
+      ...updateUser,
+      ...(profileImage && { profileImage }),
+    };
+
+    const result = await this.usersRepository.findByIdAndUpdate(userId, updatedData);
     if (result) {
       const updatedUser = await this.usersRepository.findById(userId);
       if (updatedUser) {
@@ -34,6 +47,23 @@ export class UsersService {
     } else {
       throw new BadRequestException('Update user failed');
     }
+  }
+
+  private async uploadProfileImage(file: Express.Multer.File, userId) {
+    const { filename, mimetype, path } = file;
+    const growthReport = false;
+    const uploadedProfileImage = await this.imagesRepository.uploadImage({
+      filename,
+      type: mimetype,
+      src: path,
+      growthReport,
+      userId,
+    });
+    if (!uploadedProfileImage) {
+      throw new BadRequestException('Failed to upload profile image');
+    }
+
+    return { _id: uploadedProfileImage._id, src: uploadedProfileImage.src };
   }
 
   async createRelation(user: User, body: CreateDto) {

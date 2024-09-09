@@ -32,4 +32,13 @@ export class UpdatePostsDto {
   @IsOptional()
   @IsEnum(['friend', 'family', 'none'])
   authority?: string;
+
+  @ApiProperty({
+    example: 'true',
+    description: '북마크',
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isBookmark?: boolean;
 }
