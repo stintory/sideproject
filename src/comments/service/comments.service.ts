@@ -60,8 +60,11 @@ export class CommentsService {
         // userId를 이용해 유저 정보 조회
         const user = await this.usersRepository.findByIdCommentId(comment.userId);
 
+        const liked = await this.likesRepository.findOne({ userId, commentId: comment._id });
+
         return {
           ...comment.toObject(), // 기존 댓글 정보
+          liked: !!liked,
           userImage: user?.profileImage ? user.profileImage.src : null, // 유저의 profileImage가 없으면 null
         };
       }),

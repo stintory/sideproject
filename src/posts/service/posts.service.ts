@@ -119,7 +119,15 @@ export class PostsService {
     }
     // 필터 조건에 맞는 게시글을 페이징 처리하여 조회합니다.
     const { data, totalResults } = await getPaginate<Post>(this.postModel, condition, paginationOptions, {});
-    const result: any = await Promise.all(data.map(async (post) => post.getInfo));
+    const result: any = await Promise.all(
+      data.map(async (post) => {
+        const liked = await this.likesRepository.findOne({ userId, postId: post._id });
+        return {
+          ...post.getInfo,
+          liked: !!liked, // liked가 존재하면 true, 아니면 false
+        };
+      }),
+    );
 
     return {
       data: result,
