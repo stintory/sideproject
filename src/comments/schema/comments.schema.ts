@@ -31,6 +31,12 @@ export class Comment extends Document {
     default: 0,
   })
   likes: number;
+
+  @Prop({
+    required: true,
+  })
+  authority: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 

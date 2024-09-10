@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Like } from '../schema/likes.schema';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 
 @Injectable()
 export class LikesRepository {
@@ -11,6 +11,10 @@ export class LikesRepository {
     return await this.likeModel.create(query);
   }
   async findOne(query: FilterQuery<Like>): Promise<Like> {
+    return await this.likeModel.findOne(query).exec();
+  }
+
+  async findOneLike(query: FilterQuery<Like>): Promise<Like> {
     return await this.likeModel.findOne(query).exec();
   }
 

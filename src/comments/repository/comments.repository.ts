@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Comment } from '../schema/comments.schema';
-import { Model, Types, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -30,5 +30,9 @@ export class CommentsRepository {
 
   async delete(id: string | Types.ObjectId): Promise<Comment> {
     return await this.commentModel.findByIdAndDelete(id).exec();
+  }
+
+  async updateMany(filter: FilterQuery<Comment>, update: UpdateQuery<Comment>): Promise<void> {
+    await this.commentModel.updateMany(filter, update);
   }
 }

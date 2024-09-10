@@ -25,8 +25,12 @@ export class CommentsController {
 
   @Get()
   @ApiOperation({ summary: '댓글 전체 조회' })
-  async getAllComments(@CurrentUser() user: User, @PaginationDecorator() pagination: PaginationOptions) {
-    return this.commentsService.findAll(user, pagination);
+  async getAllComments(
+    @CurrentUser() user: User,
+    @PaginationDecorator() pagination: PaginationOptions,
+    @Query('authority') authority?: string,
+  ) {
+    return this.commentsService.findAll(user, pagination, authority);
   }
 
   @Get(':id')

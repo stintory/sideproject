@@ -34,4 +34,6 @@ export class Like extends Document {
 }
 
 const _LikeSchema = SchemaFactory.createForClass(Like);
+_LikeSchema.index({ userId: 1, commentId: 1 });
+_LikeSchema.index({ userId: 1, postId: 1 });
 export const LikeSchema = _LikeSchema;

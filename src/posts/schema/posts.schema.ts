@@ -21,6 +21,11 @@ export class Post extends Document {
   @Prop({
     required: true,
   })
+  nickname: string;
+
+  @Prop({
+    required: true,
+  })
   title: string;
 
   @Prop({

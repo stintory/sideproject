@@ -27,10 +27,12 @@ export class PostsService {
       const { title, content, growthReport, authority } = body;
       console.log(title, content, growthReport, authority);
       const userId = user._id;
+      const nickname = user.nickname;
       const growthReportFlag = growthReport ?? false;
       const newAuthority = authority ?? 'none';
 
       const newPostData: any = {
+        nickname,
         title,
         content,
         userId,
@@ -76,7 +78,7 @@ export class PostsService {
     return { _id: uploadedImage._id, src: uploadedImage.src };
   }
 
-  async findAll(user, paginationOptions: PaginationOptions, authority: string): Promise<PaginationResult<Post>> {
+  async findAll(user: User, paginationOptions: PaginationOptions, authority: string): Promise<PaginationResult<Post>> {
     const userId = new Types.ObjectId(user._id);
     let condition: FilterQuery<Post>;
 
@@ -119,12 +121,16 @@ export class PostsService {
     }
     // 필터 조건에 맞는 게시글을 페이징 처리하여 조회합니다.
     const { data, totalResults } = await getPaginate<Post>(this.postModel, condition, paginationOptions, {});
+    // const result: any = await Promise.all(data.map(async (post) => post.getInfo));
     const result: any = await Promise.all(
       data.map(async (post) => {
-        const liked = await this.likesRepository.findOne({ userId, postId: post._id });
+        // 좋아요 여부 조회
+        const like = await this.likesRepository.findOne({ userId, postId: post._id });
+        console.log(`Checking like for userId: ${userId}, postId: ${post._id}`);
+        console.log(`Like result: ${like}`);
         return {
-          ...post.getInfo,
-          liked: !!liked, // liked가 존재하면 true, 아니면 false
+          ...post.getInfo, // 기존 post 정보를 가져옴
+          liked: !!like, // like가 존재하면 true, 아니면 false
         };
       }),
     );
@@ -220,6 +226,13 @@ export class PostsService {
         updatedAt,
       });
 
+      if (findPost.authority !== authority) {
+        await this.commentsRepository.updateMany(
+          { postId },
+          { $set: { authority } }, // 댓글의 authority를 게시글의 authority로 설정합니다.
+        );
+      }
+
       return {
         result: {
           ...updatePost.getInfo,
@@ -243,21 +256,22 @@ export class PostsService {
 
   async toggleLike(userId: string, postId: string) {
     try {
-      const post = await this.postsRepository.findById(postId);
+      const post = await this.postsRepository.findById(new Types.ObjectId(postId));
       if (!post) {
         throw new BadRequestException('Not exist Post');
       }
 
+      const newPostId = new Types.ObjectId(postId);
       // 좋아요 여부 확인 (LikeSchema에서 조회)
-      const existingLike = await this.likesRepository.findOne({ userId, postId });
+      const existingLike = await this.likesRepository.findOneLike({ userId, postId: newPostId });
 
       if (existingLike) {
         // 좋아요가 이미 존재 하면 좋아요 취소
-        await this.likesRepository.deleteOne({ userId, postId });
+        await this.likesRepository.deleteOne({ userId, postId: newPostId });
         post.likes -= 1;
       } else {
         // 좋아요 추가
-        await this.likesRepository.create({ userId, postId });
+        await this.likesRepository.create({ userId, postId: newPostId });
         post.likes += 1;
       }
 
