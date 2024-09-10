@@ -78,6 +78,7 @@ export class Post extends Document {
   readonly getInfo: {
     _id: Types.ObjectId;
     userId: Types.ObjectId;
+    nickname: string;
     title: string;
     content: string;
     comments: Types.ObjectId[];
@@ -96,6 +97,7 @@ _PostSchema.virtual('getInfo').get(function (this: Post) {
   return {
     id: this._id,
     userId: this.userId,
+    nickname: this.nickname,
     title: this.title,
     content: this.content,
     comments: this.comments,
