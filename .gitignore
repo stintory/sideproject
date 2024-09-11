@@ -415,3 +415,4 @@ _cv_result/*
 !_cv_result/.keep
 
 _logs/*
+/_upload/

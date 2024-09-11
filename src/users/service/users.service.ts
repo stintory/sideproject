@@ -66,10 +66,11 @@ export class UsersService {
     return { _id: uploadedProfileImage._id, src: uploadedProfileImage.src };
   }
 
-  async createRelation(user: User, body: CreateDto) {
-    const { email, type } = body;
+  async createRelation(id: string, user: User, body: CreateDto) {
+    const relationId = new Types.ObjectId(id);
+    const { type } = body;
     // 유저 조회
-    const findUser = await this.usersRepository.findOne({ email });
+    const findUser = await this.usersRepository.findOne({ _id: relationId });
     if (!findUser) {
       throw new BadRequestException('User not found');
     }
@@ -94,22 +95,23 @@ export class UsersService {
     };
   }
 
-  async relationResponse(user: User, body: ResponseRelationDto) {
-    const { requesterId, accept } = body;
-    console.log(requesterId);
-    const requester = await this.usersRepository.findById(requesterId);
-    console.log(requester);
+  async relationResponse(id: string, user: User, body: ResponseRelationDto) {
+    const { accept } = body;
+    const requester = await this.usersRepository.findById(id);
     if (!requester) {
       throw new BadRequestException('신청한 유저를 찾을 수 없다.');
     }
+    console.log(requester._id);
 
-    const requesterObjectId = new Types.ObjectId(requesterId);
+    // const requesterObjectId = new Types.ObjectId(requesterId);
+    // console.log(requesterObjectId);
 
     const request = await this.relationRequestRepository.findOne({
-      requesterId: requesterObjectId,
+      requesterId: requester._id,
       recipientId: user._id,
       status: 'pending',
     });
+    console.log(request);
 
     if (!request) {
       throw new BadRequestException('해당 관계를 신청할 수 없습니다.');
@@ -149,10 +151,11 @@ export class UsersService {
     }
   }
 
-  async deleteRelation(user: User, body: CreateDto) {
-    const { email, type } = body;
+  async deleteRelation(id: string, user: User, body: CreateDto) {
+    const userId = new Types.ObjectId(id);
+    const { type } = body;
 
-    const findUser = await this.usersRepository.findOne({ email });
+    const findUser = await this.usersRepository.findOne({ _id: userId });
     if (!findUser) {
       throw new BadRequestException('User not found');
     }

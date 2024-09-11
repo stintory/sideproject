@@ -39,4 +39,5 @@ export class RelationRequest extends Document {
 }
 
 const _RelationRequestSchema = SchemaFactory.createForClass(RelationRequest);
+_RelationRequestSchema.index({ requesterId: 1, recipientId: 1, status: 1 });
 export const RelationRequestSchema = _RelationRequestSchema;
