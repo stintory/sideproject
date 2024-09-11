@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { CurrentUser } from '../../@decorator/user.decorator';
 import { User } from '../../users/schema/user.schema';
 import { RelationrequestService } from '../service/relationrequest.service';
@@ -26,7 +26,7 @@ export class RelationrequestController {
 
   // 수락한 관계 목록 보기
   @Get('/request/status')
-  async getAcceptedList(@CurrentUser() user: User, status: string) {
+  async getAcceptedList(@CurrentUser() user: User, @Query('status') status: string) {
     return await this.relationService.getAcceptedList(user, status);
   }
 

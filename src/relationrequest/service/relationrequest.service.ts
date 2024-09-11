@@ -35,6 +35,7 @@ export class RelationrequestService {
 
   async getAcceptedList(user: User, status: string) {
     const userId = new Types.ObjectId(user._id);
+    console.log(userId);
     try {
       const relations = await this.relationsRepository.find({
         $or: [
@@ -46,6 +47,7 @@ export class RelationrequestService {
       const userIds = relations.map((relation) =>
         relation.requesterId.toString() === userId.toString() ? relation.recipientId : relation.requesterId,
       );
+      console.log(userIds);
 
       const users = await this.usersRepository.find({ _id: { $in: userIds } });
 
@@ -53,8 +55,14 @@ export class RelationrequestService {
         return { message: 'none' };
       }
 
+      const userInfo = users.map((user) => ({
+        _id: user._id,
+        email: user.email,
+        nickname: user.nickname,
+        image: user.profileImage,
+      }));
       return {
-        data: users,
+        data: userInfo,
         message: `relationships successfully.`,
       };
     } catch (error) {

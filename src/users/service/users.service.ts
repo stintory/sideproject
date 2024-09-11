@@ -154,7 +154,7 @@ export class UsersService {
 
     const findUser = await this.usersRepository.findOne({ email });
     if (!findUser) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException('Usernpm not found');
     }
 
     const findUserObjectId = new Types.ObjectId(findUser._id);
