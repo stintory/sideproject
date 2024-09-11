@@ -132,10 +132,12 @@ export class CommentsService {
         const user = await this.usersRepository.findByIdCommentId(comment.userId);
 
         const liked = await this.likesRepository.findOne({ userId, commentId: comment._id });
+        const isMine = String(comment.userId) === String(userId);
 
         return {
           ...comment.toObject(), // 기존 댓글 정보
           liked: !!liked,
+          isMine,
           userImage: user?.profileImage ? user.profileImage.src : null, // 유저의 profileImage가 없으면 null
         };
       }),
@@ -160,10 +162,12 @@ export class CommentsService {
     const checkLike = await this.likesRepository.findOne({ userId, commentId });
 
     const findUser = await this.usersRepository.findByIdCommentId(comment.userId);
+    const isMine = String(comment.userId) === String(userId);
     return {
       result: {
         ...comment,
         liked: !!checkLike,
+        isMine,
         userImage: findUser?.profileImage ? findUser.profileImage.src : null, // 유저의 profileImage가 없으면 null
       },
     };

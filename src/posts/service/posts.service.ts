@@ -128,9 +128,11 @@ export class PostsService {
         const like = await this.likesRepository.findOne({ userId, postId: post._id });
         console.log(`Checking like for userId: ${userId}, postId: ${post._id}`);
         console.log(`Like result: ${like}`);
+        const isMine = String(post.userId) === String(userId);
         return {
           ...post.getInfo, // 기존 post 정보를 가져옴
           liked: !!like, // like가 존재하면 true, 아니면 false
+          isMine,
         };
       }),
     );
@@ -176,6 +178,7 @@ export class PostsService {
       );
 
       const filteredComments = commentsWithDetails.filter((comment) => comment !== null);
+      const isMine = String(findPost.userId) === String(userId);
 
       const result = {
         id: findPost._id,
@@ -187,6 +190,7 @@ export class PostsService {
         authority: findPost.authority,
         userId: findPost.userId,
         liked: !!findLike,
+        isMine,
         createdAt: findPost.createdAt,
         updatedAt: findPost.updatedAt,
       };
