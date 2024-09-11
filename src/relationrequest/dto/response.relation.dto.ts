@@ -10,4 +10,12 @@ export class ResponseRelationDto {
   })
   @IsBoolean()
   accept: boolean;
+
+  @ApiProperty({
+    required: true,
+    example: 'requesterId',
+    description: '요청한 user ObjectId',
+  })
+  @IsString()
+  requesterId: string;
 }

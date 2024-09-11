@@ -88,34 +88,34 @@ export class UsersController {
     return await this.usersService.updateUser(userId, body, file);
   }
 
-  @Post('/relation/:id')
+  @Post('/relation')
   @HttpCode(200)
   @ApiOperation({
     summary: '사용자 - 사용자 관계',
     description: '사용자 - 사용자 관계를 추가 및 삭제.',
   })
-  async relationship(@Param('id') id: string, @CurrentUser() user: User, @Body() body: CreateDto) {
-    return await this.usersService.createRelation(id, user, body);
+  async relationship(@CurrentUser() user: User, @Body() body: CreateDto) {
+    return await this.usersService.createRelation(user, body);
   }
 
-  @Post('/relation/response/:id')
+  @Post('/relation/response')
   @HttpCode(200)
   @ApiOperation({
     summary: '사용자 - 사용자 관계 수락 또는 거절',
     description: '사용자 - 사용자 관계 수락 또는 거절.',
   })
-  async relationResponse(@Param('id') id: string, @CurrentUser() user: User, @Body() body: ResponseRelationDto) {
-    return await this.usersService.relationResponse(id, user, body);
+  async relationResponse(@CurrentUser() user: User, @Body() body: ResponseRelationDto) {
+    return await this.usersService.relationResponse(user, body);
   }
 
-  @Delete('/relation/:id')
+  @Delete('/relation')
   @HttpCode(200)
   @ApiOperation({
     summary: '사용자 - 사용자 관계 모두 삭제',
     description: '사용자 - 사용자 관계 모두 삭제.',
   })
-  async deleteRelations(@Param('id') id: string, @CurrentUser() user: User, @Body() body: CreateDto) {
-    return await this.usersService.deleteRelation(id, user, body);
+  async deleteRelations(@CurrentUser() user: User, @Body() body: CreateDto) {
+    return await this.usersService.deleteRelation(user, body);
   }
 
   @Delete(':id')
