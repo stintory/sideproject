@@ -46,7 +46,11 @@ $ npm run start:dev
 
 ```
 
-## Test
+## Private Project Info
+- Nestjs
+- MongoDB
+- Swagger
+- 
 
 
 ## Support
