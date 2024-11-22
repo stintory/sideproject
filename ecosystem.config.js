@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'platform-api-nestjs',
+      name: 'boilerplate',
       script: './main.js',
       env_production: {
         NODE_ENV: 'production',

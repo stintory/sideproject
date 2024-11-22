@@ -8,14 +8,17 @@ import * as express from 'express';
 import * as path from 'path';
 import { winstonLogger } from './@common/middlewares/winston.logger';
 import { AppModule } from './app.module';
+import { checkFileDate } from './@utils/check.file';
 
 declare const module: any;
 
 async function bootstrap() {
+  checkFileDate();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     logger: winstonLogger,
   });
+  app.setGlobalPrefix('v1');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -46,8 +49,8 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   const config = new DocumentBuilder()
-    .setTitle('Letsee Developer API')
-    .setDescription('Letsee Developer 개발을 위한 API 문서입니다.')
+    .setTitle('Developer API')
+    .setDescription('Developer 개발을 위한 API 문서입니다.')
     .addBearerAuth(
       {
         type: 'http',
@@ -59,7 +62,7 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
-    .addServer('http://localhost:3001');
+    .addServer('http://localhost:3005');
   const configV1 = config.setVersion('1.0').build();
 
   const document = SwaggerModule.createDocument(app, configV1, {
@@ -81,6 +84,7 @@ async function bootstrap() {
   });
 
   app.use(express.static(path.join(__dirname, '..', 'views')));
+  app.use('/_upload', express.static(path.join(__dirname, '../_upload')));
 
   const PORT = process.env.PORT;
   console.log(PORT);

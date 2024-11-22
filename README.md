@@ -35,28 +35,23 @@ $ npm install
 ## Running the app
 
 ```bash
+# change git branch
+$ git checkout develop
+
 # development
 $ npm run start
 
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Private Project Info
+- Nestjs
+- MongoDB
+- Swagger
+- 
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## View Schema Model
 - Install Moon Modeler.
@@ -67,11 +62,15 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
+## View Schema Model
+- Install Moon Modeler.
+- open project-v1.3.dmm in schemaModel folder
+![view](https://github.com/user-attachments/assets/82160373-451b-43b1-bf7a-4eed63adca71)
+
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [DH Kang]
+- Website - [Not Yet]
 
 ## License
 
