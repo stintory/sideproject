@@ -416,3 +416,4 @@ _cv_result/*
 
 _logs/*
 /_upload/
+.env
